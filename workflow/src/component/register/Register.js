@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
+import {toast} from "react-toastify";
 
 const Register = () => {
 
@@ -21,7 +22,7 @@ const Register = () => {
 
 
         Service.register(data).then((response) => {
-            alert("Đăng ký thành công !")
+            toast.success("Đăng Ký Thành Công !")
             console.log(response)
             setIsLoggedIn(true);
             // setIsLoggedIn(true);
@@ -29,21 +30,26 @@ const Register = () => {
         }).catch((error) => {
             console.log(error)
             // console.log(error)
-            alert("Đăng ký thất bại !")
+            toast.error("Đăng Ký Thất Bại. Hãy Thử Lại !")
         })
     }
 
     const validateSchema = Yup.object().shape({
         name: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Tên không được chứa ký tự đặc biệt')
             .min(6, "Tên người dùng có ít nhất 6 ký tự!")
             .required("Tên người dùng không được để trống"),
         username: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Chuỗi không được chứa ký tự đặc biệt')
             .min(6, "Tên tài khoản có ít nhất 6 ký tự!")
             .required("Tên tài khoản không được để trống"),
         password: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Chuỗi không được chứa ký tự đặc biệt')
             .min(6, "Mật khẩu có ít nhất 6 ký tự!")
+            .max(32, "Mật khẩu không dài quá 32 ký tự!")
             .required("Mật khẩu không được để trống"),
         cpassword: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Chuỗi không được chứa ký tự đặc biệt')
             .min(6, "Mật khẩu có ít nhất 6 ký tự!")
             .required("Mật khẩu không được để trống")
     });
