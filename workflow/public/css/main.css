@@ -209,7 +209,7 @@ body {
 input[type="text"] {
     border: 1px solid lightgrey;
     font-size: 1em;
-    width: 24.5rem;
+    width: 100%;
     background-color: transparent;
 }
 
