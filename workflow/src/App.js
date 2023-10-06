@@ -4,19 +4,25 @@ import Home from "./component/home/Home";
 import {Route, Routes} from "react-router";
 import Register from "./component/register/Register";
 import Login from "./component/login/login";
-import HomeTeams from "./component/home/homeTeams";
 
+import Board from "./component/board";
+import {Provider} from "react-redux";
+import store from "./redux/store";
+import HomeTeams from "./component/home/homeTeams";
 
 function App() {
     return (
-        <div className="App">
+        <Provider store={store}>
             <Routes>
                 <Route path={"/login"} element={<Login/>}></Route>
                 <Route path={"/register"} element={<Register/>}></Route>
                 <Route path="/homeTeam" element={<HomeTeams/>} />
-            </Routes>
+                <Route path="/home" element={<Home/>} />
+                <Route path={'/b'} element={<Board/>}/>
 
-        </div>
+            </Routes>
+        </Provider>
+
     );
 }
 

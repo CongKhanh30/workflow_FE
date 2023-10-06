@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {useNavigate} from 'react-router-dom';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
+import {toast} from "react-toastify";
 
 const Register = () => {
 
@@ -21,30 +22,35 @@ const Register = () => {
 
 
         Service.register(data).then((response) => {
-            alert("Đăng ký thành công !")
+            toast.success("Đăng Ký Thành Công !")
             console.log(response)
             setIsLoggedIn(true);
-            // setIsLoggedIn(true);
             navigate('/login');
         }).catch((error) => {
             console.log(error)
-            // console.log(error)
-            alert("Đăng ký thất bại !")
+            toast.error("Đăng Ký Thất Bại. Hãy Thử Lại !")
         })
     }
 
     const validateSchema = Yup.object().shape({
         name: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Tên không được chứa ký tự đặc biệt')
             .min(6, "Tên người dùng có ít nhất 6 ký tự!")
             .required("Tên người dùng không được để trống"),
         username: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Tên tài khoản không được chứa ký tự đặc biệt')
             .min(6, "Tên tài khoản có ít nhất 6 ký tự!")
             .required("Tên tài khoản không được để trống"),
         password: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'MK không được chứa ký tự đặc biệt')
             .min(6, "Mật khẩu có ít nhất 6 ký tự!")
+            .max(32, "Mật khẩu không dài quá 32 ký tự!")
             .required("Mật khẩu không được để trống"),
         cpassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải giống với mật khẩu')
+            .matches(/^[a-zA-Z0-9]*$/, 'MK không được chứa ký tự đặc biệt')
             .min(6, "Mật khẩu có ít nhất 6 ký tự!")
+            .max(32, "Mật khẩu không dài quá 32 ký tự!")
             .required("Mật khẩu không được để trống")
     });
 
@@ -58,8 +64,8 @@ const Register = () => {
                                 <div className="card-header pb-0">
                                     <div className="app-brand w-100 d-flex justify-content-center border-bottom-0">
                                         <a className="w-auto pl-0" href="/index.html">
-                                            <img src="images/logo.png" alt="Mono"/>
-                                            <span className="brand-name text-dark">MONO</span>
+                                            <img src="./images/logo.png" alt="Mono"/>
+                                            <span className="brand-name text-dark">HELLO</span>
                                         </a>
                                     </div>
                                 </div>
@@ -73,17 +79,18 @@ const Register = () => {
                                     }}
                                             validationSchema={validateSchema}
                                             onSubmit={(values) => {
+                                                register();
                                         console.log(values);
                                     }}>
                                         <Form>
                                             <div className="row">
-                                                <div className="form-group col-md-12 mb-4">
+                                                <div className="form-group col-md-12 ">
                                                     <Field type="text" className="form-control input-lg" id="name"
-                                                           name={'name'} aria-describedby="nameHelp" required="required"
+                                                           name={'name'}  required="required"
                                                            placeholder="Name"/>
                                                     <ErrorMessage name="name"  component="div" className="text-danger" />
                                                 </div>
-                                                <div className="form-group col-md-12 mb-4">
+                                                <div className="form-group col-md-12 ">
                                                     <Field type="text" className="form-control input-lg" id="username"
                                                            name={'username'} placeholder="Username"/>
                                                     <ErrorMessage name="username"  component="div" className="text-danger" />
@@ -102,7 +109,8 @@ const Register = () => {
                                                 <div className="col-md-12">
 
                                                     <button type="submit" className="btn btn-primary btn-pill mb-4"
-                                                            onClick={() => register()}>Sign Up
+                                                            style={{marginLeft: '37%'}}
+                                                            >Sign Up
                                                     </button>
 
                                                     <p>Already have an account?
