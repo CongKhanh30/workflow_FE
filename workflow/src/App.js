@@ -1,23 +1,26 @@
 import logo from './logo.svg';
 import './App.css';
-import Home from "./component/home/home";
-import Login from "./component/login/login";
+import Home from "./component/home/Home";
 import {Route, Routes} from "react-router";
+import Register from "./component/register/Register";
+import Login from "./component/login/Login";
+
 import Board from "./component/board";
 import {Provider} from "react-redux";
 import store from "./redux/store";
 
 function App() {
-  return (
-      <Provider store={store}>
-          <Routes>
-              {/*<Route path="/" element={<Login/>} />*/}
-              {/*<Route path="/home" element={<Home/>} />*/}
-              <Route path={'/'} element={<Board/>}/>
-          </Routes>
-      </Provider>
+    return (
+        <Provider store={store}>
+            <Routes>
+                <Route path={"/login"} element={<Login/>}></Route>
+                <Route path={"/register"} element={<Register/>}></Route>
+                <Route path="/home" element={<Home/>} />
+                <Route path={'/b'} element={<Board/>}/>
 
-  );
+            </Routes>
+        </Provider>    );
+
 }
 
 export default App;
