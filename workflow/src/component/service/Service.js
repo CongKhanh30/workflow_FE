@@ -1,7 +1,6 @@
 import axios from "axios";
 
-
-const Service = {
+const service = {
 
     register: (formData) => {
         console.log(formData);
@@ -13,7 +12,7 @@ const Service = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-                data : formData
+                data: formData
             };
 
             axios.request(config)
@@ -24,25 +23,31 @@ const Service = {
                     reject(err)
                 });
         });
+    },
+
+    getAllTeam: () => {
+        return new Promise((resolve, reject) => {
+            let config = {
+                method: 'get',
+                maxBodyLength: Infinity, // cho phep gui du lieu lon len server
+                url: 'http://localhost:8080/team',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            }
+            axios.request(config).then(response => {
+                resolve(response.data);
+                console.log(response.data);
+            }).catch(function (err) {
+                reject(err)
+            });
+        })
+
     }
-    // profile: () => {
-    //     return new Promise((resolve, reject) => {
-    //         axios.get(USER_PROFILE_API+localStorage.getItem("idAccount"), {
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data',
-    //                 'Accept': 'application/json',
-    //                 "Authorization": "Bearer " + localStorage.getItem('token'),
-    //             }
-    //         })
-    //             .then(response => {
-    //                 // console.log(response)
-    //                 resolve(response);
-    //             })
-    //             .catch(function (err) {
-    //                 reject(err)
-    //             });
-    //     });
-    // },
 };
 
-export default Service;
+// tao constructor
+
+
+export default service;

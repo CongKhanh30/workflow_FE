@@ -34,7 +34,7 @@ const Login = () => {
                 console.log(response.data);
                 localStorage.setItem("token", response.data.token);
                 console.log("dang nhap thanh cong");
-                navigate("/home");
+                navigate("/homeTeam");
             }).catch((error) => {
             console.log(error)
             alert("Sai Username/Password")

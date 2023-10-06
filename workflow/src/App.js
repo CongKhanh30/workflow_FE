@@ -4,6 +4,7 @@ import Home from "./component/home/Home";
 import {Route, Routes} from "react-router";
 import Register from "./component/register/Register";
 import Login from "./component/login/login";
+import HomeTeams from "./component/home/homeTeams";
 
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
             <Routes>
                 <Route path={"/login"} element={<Login/>}></Route>
                 <Route path={"/register"} element={<Register/>}></Route>
-                <Route path="/home" element={<Home/>} />
+                <Route path="/homeTeam" element={<HomeTeams/>} />
             </Routes>
 
         </div>
