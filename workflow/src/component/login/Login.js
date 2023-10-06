@@ -92,22 +92,16 @@ const Login = () => {
                                                 <div className="col-md-12">
 
                                                     <div className="d-flex justify-content-between mb-3">
-                                                        {/*<div className="custom-control custom-checkbox mr-3 mb-3">*/}
-                                                        {/*    <input type="checkbox" className="custom-control-input"*/}
-                                                        {/*           id="customCheck2"/>*/}
-                                                        {/*    <label className="custom-control-label"*/}
-                                                        {/*           htmlFor="customCheck2">Remember me</label>*/}
-                                                        {/*</div>*/}
-                                                        {/*<a className="text-color" href="#">Change password?</a>*/}
+                                                        <a className="text-color" href="#">Change password?</a>
 
                                                     </div>
 
-                                                    <button type="submit" className="btn btn-primary btn-pill mb-4">
+                                                    <button type="submit" className="btn btn-primary btn-pill mb-4" style={{marginLeft: "32%"}}>
                                                         Sign In
                                                     </button>
 
                                                     <p>Don't have an account yet?
-                                                        <Link className="text-blue" to={"/register"}>   Sign Up</Link>
+                                                        <Link className="text-blue" to={"/register"} >   Sign Up</Link>
                                                     </p>
                                                 </div>
                                             </div>

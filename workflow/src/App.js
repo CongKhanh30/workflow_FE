@@ -5,18 +5,22 @@ import {Route, Routes} from "react-router";
 import Register from "./component/register/Register";
 import Login from "./component/login/Login";
 
+import Board from "./component/board";
+import {Provider} from "react-redux";
+import store from "./redux/store";
 
 function App() {
     return (
-        <div className="App">
+        <Provider store={store}>
             <Routes>
                 <Route path={"/login"} element={<Login/>}></Route>
                 <Route path={"/register"} element={<Register/>}></Route>
                 <Route path="/home" element={<Home/>} />
-            </Routes>
+                <Route path={'/b'} element={<Board/>}/>
 
-        </div>
-    );
+            </Routes>
+        </Provider>    );
+
 }
 
 export default App;

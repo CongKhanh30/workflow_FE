@@ -109,6 +109,7 @@ const Register = () => {
                                                 <div className="col-md-12">
 
                                                     <button type="submit" className="btn btn-primary btn-pill mb-4"
+                                                            style={{marginLeft: '37%'}}
                                                             >Sign Up
                                                     </button>
 
