@@ -72,22 +72,21 @@ const Login = () => {
                                         <Form action="/index.html">
                                             <div className="row">
                                                 <div className="form-group col-md-12 mb-4">
-                                                    <ErrorMessage name="username"  component="div" className="text-danger" />
                                                     <Field type="username" className="form-control input-lg"
                                                            id="username"
                                                            name="username"
                                                            aria-describedby="emailHelp"
                                                            placeholder="Username"/>
-
+                                                    <ErrorMessage name="username"  component="div" className="text-danger" />
                                                 </div>
-                                                <div className="col-md-12"><ErrorMessage name="password"  component="div" className="text-danger"  /></div>
+
                                                 <div className="form-group col-md-12 ">
 
                                                     <Field type="password" className="form-control input-lg"
                                                            id="password"
                                                            name="password"
                                                            placeholder="Password"/>
-
+                                                    <ErrorMessage name="password"  component="div" className="text-danger"/>
                                                 </div>
                                                 <div className="col-md-12">
 
