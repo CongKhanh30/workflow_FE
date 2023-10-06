@@ -64,7 +64,7 @@ const Register = () => {
                                 <div className="card-header pb-0">
                                     <div className="app-brand w-100 d-flex justify-content-center border-bottom-0">
                                         <a className="w-auto pl-0" href="/index.html">
-                                            <img src="images/logo.png" alt="Mono"/>
+                                            <img src="./images/logo.png" alt="Mono"/>
                                             <span className="brand-name text-dark">HELLO</span>
                                         </a>
                                     </div>
