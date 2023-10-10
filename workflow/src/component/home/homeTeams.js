@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import service from "../service/Service";
+import teamService from "../service/teamService";
+import {Link} from "react-router-dom";
 
 const HomeTeams = () => {
     const [listTeam, setListTeam] = useState([]);
 
     useEffect(() => {
-            service.getAllTeam().then(res => {
-                console.log(res);
+            teamService.getAllTeam().then(res => {
                 setListTeam(res);
             }).catch(err => {
                 console.log(err);
@@ -18,6 +18,8 @@ const HomeTeams = () => {
         <div>
             <div className="cotainer">
                 <h1 className="head">List Team</h1>
+
+                <Link to={"/createTeam"}> <button className="btn btn-primary" >Add Team </button> </Link>
 
                 <table className="table table-striped">
                     <thead>

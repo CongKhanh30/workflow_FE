@@ -34,10 +34,10 @@ const Login = () => {
 
         axios.post('http://localhost:8080/login', values)
             .then(function (response) {
-                console.log(response.data);
+                //console.log(response.data);
                 localStorage.setItem("token", response.data.token);
                 toast.success("Đăng Nhập Thành Công !")
-                navigate("/home");
+                navigate("/homeTeam");
             }).catch((error) => {
             console.log(error)
             toast.error("Sai Tên Tài Khoản Hoặc Mật Khẩu !")
