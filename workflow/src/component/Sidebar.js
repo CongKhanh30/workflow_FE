@@ -6,24 +6,26 @@ import useDarkMode from "../hooks/useDarkMode";
 import boardsSlice from "../redux/boardsSlice";
 import AddEditBoardModal from "../modals/AddEditBoardModal";
 import service from "./service/Service";
+import boardService from "./service/BoardService";
+import {useParams} from "react-router";
 
 function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
     const dispatch = useDispatch();
     const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
     const [colorTheme, setTheme] = useDarkMode();
 
+    const {id} = useParams()
+
 
     const [listBoard, setListBoard] = useState([]); // khoi tao state listBoard, state nay dung de lay du lieu tu store
 
     useEffect(() => { // useEffect dung de xu ly logic sau khi render
-        service.getAllBoard().then(res => {
+        boardService.getAllBoardByTeamId(id).then(res => {
             setListBoard(res)
-
         })
-
     }, []);
 
-    const boards = useSelector((state) => state.boards);
+   // const boards = useSelector((state) => state.boards);
 
     return (
         <div>

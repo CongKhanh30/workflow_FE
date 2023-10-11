@@ -14,18 +14,33 @@ const HomeTeams = () => {
         }, []
     );
 
+    const removeTeam = (id) => {
+        const confirm = window.confirm("Are you sure delete this tour?");
+        if (confirm === true) {
+            teamService.removeTeam(id).then(res => {
+                alert("Delete success");
+                window.location.reload();
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+    }
+
     return (
         <div>
             <div className="cotainer">
                 <h1 className="head">List Team</h1>
 
-                <Link to={"/createTeam"}> <button className="btn btn-primary" >Add Team </button> </Link>
+                <Link to={"/createTeam"}>
+                    <button className="btn btn-primary">Add Team</button>
+                </Link>
 
                 <table className="table table-striped">
                     <thead>
                     <tr>
                         <th>Id</th>
                         <th>name</th>
+                        <th>danh sach thanh vien</th>
 
                         <th colSpan="2" className="action">Action</th>
 
@@ -41,12 +56,23 @@ const HomeTeams = () => {
                                     <td>{team.id}</td>
                                     <td>{team.name}</td>
 
+                                    <td>{team.members.map((member, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <p>{member}</p>
+                                            </div>
+                                        )
+                                    })}</td>
+
                                     <td>
-                                        <button className="btn btn-danger">detail</button>
+                                        <Link to={"/b/" + team.id}>
+                                            <button className="btn btn-warning">Detail</button>
+                                        </Link>
                                     </td>
 
                                     <td>
-                                        <button className="btn btn-danger">Delete</button>
+                                        <button className="btn btn-danger" onClick={() => removeTeam(team.id)}>delete
+                                        </button>
                                     </td>
                                 </tr>
                             )

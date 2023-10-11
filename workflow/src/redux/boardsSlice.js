@@ -18,6 +18,7 @@ const boardsSlice = createSlice({
             board.columns = payload.newColumns;
             state.push(board);
         },
+
         editBoard: (state, action) => {
             const payload = action.payload;
             const board = state.find((board) => board.isActive);

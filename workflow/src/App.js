@@ -16,7 +16,7 @@ function App() {
                 <Route path={"/login"} element={<Login/>}></Route>
                 <Route path={"/register"} element={<Register/>}></Route>
                 <Route path="/homeTeam" element={<HomeTeams/>} />
-                <Route path={'/b'} element={<Board/>}/>
+                <Route path={'/b/:id'} element={<Board/>}/>
                 <Route path={'/createTeam'} element={<CreateHomeTeams/>}/>
 
             </Routes>
