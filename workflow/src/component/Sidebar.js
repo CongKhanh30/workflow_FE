@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import boardIcon from "../assets/icon-board.svg";
-import useDarkMode from "../hooks/useDarkMode";
+import useDarkMode from "../hooks/UseDarkMode";
 
 import boardsSlice from "../redux/boardsSlice";
 import AddEditBoardModal from "../modals/AddEditBoardModal";

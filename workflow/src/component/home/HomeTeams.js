@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import teamService from "../service/teamService";
+import teamService from "../service/TeamService";
 import {Link} from "react-router-dom";
 
 const HomeTeams = () => {
