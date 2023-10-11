@@ -5,11 +5,13 @@ import {useDispatch, useSelector} from "react-redux";
 import Header from "./Header";
 import Home from "./Home";
 import service from "./service/Service";
+import boardService from "./service/BoardService";
+import {useParams} from "react-router";
 
 const Board = () => {
     const [isBoardModalOpen, setIsBoardModalOpen] = useState(false); // khoi tao state isBoardModalOpen, state nay dung de mo modal
     const dispatch = useDispatch(); // khoi tao dispatch dung de dispatch action
-
+    const {id} = useParams()
     // const boards = useSelector((state) => { // khoi tao state boards, state nay dung de lay du lieu tu store
     //     return state.boards
     // });
@@ -19,10 +21,11 @@ const Board = () => {
     const [listBoard, setListBoard] = useState([]); // khoi tao state listBoard, state nay dung de lay du lieu tu store
 
     useEffect(() => { // useEffect dung de xu ly logic sau khi render
-        service.getAllBoard().then(res => {
+        boardService.getAllBoardByTeamId(id).then(res => {
             setListBoard(res)
         })
     }, []);
+
 
     const activeBoard = listBoard.find((board) => board.isActive);
     // const activeBoard = listBoard.find((board)=>board.isActive)
