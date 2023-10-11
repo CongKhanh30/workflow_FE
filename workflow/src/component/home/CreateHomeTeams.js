@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigate} from "react-router";
 import {Field, Form, Formik} from "formik";
 import {Link} from "react-router-dom";
-import teamService from "../service/teamService";
+import teamService from "../service/TeamService";
 
 const CreateHomeTeams = () => {
     const navigate = useNavigate();
