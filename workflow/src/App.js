@@ -8,6 +8,7 @@ import store from "./redux/store";
 import HomeTeams from "./component/home/HomeTeams";
 import Login from "./component/login/Login";
 import CreateHomeTeams from "./component/home/CreateHomeTeams";
+import CreateBoard from "./board/CreateBoard";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/homeTeam" element={<HomeTeams/>} />
                 <Route path={'/b/:id'} element={<Board/>}/>
                 <Route path={'/createTeam'} element={<CreateHomeTeams/>}/>
+                <Route path={'/createBoard/:id'} element={<CreateBoard/>}/>
 
             </Routes>
         </Provider>
