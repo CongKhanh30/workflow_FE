@@ -40,12 +40,27 @@ const teamService = {
                 reject(err)
             });
         })
+    },
 
+    removeTeam: (id) => {
+        return new Promise((resolve, reject) => {
+            let config = {
+                method: 'get',
+                maxBodyLength: Infinity, // cho phep gui du lieu lon len server
+                url: 'http://localhost:8080/team/deleteTeamById/' + id,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    "content-type": "application/json",
+                }
+            }
+            axios.request(config).then(response => {
+                resolve(response.data);
+            }).catch(function (err) {
+                reject(err)
+            });
+        })
     }
 
 };
-
 // tao constructor
-
-
 export default teamService;
