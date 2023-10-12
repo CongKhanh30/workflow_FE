@@ -8,6 +8,8 @@ import AddEditBoardModal from "../modals/AddEditBoardModal";
 import service from "./service/Service";
 import boardService from "./service/BoardService";
 import {useParams} from "react-router";
+import {Link} from "react-router-dom";
+import board from "./Board";
 
 function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
     const dispatch = useDispatch();
@@ -19,13 +21,12 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
 
     const [listBoard, setListBoard] = useState([]); // khoi tao state listBoard, state nay dung de lay du lieu tu store
 
-    useEffect(() => { // useEffect dung de xu ly logic sau khi render
+    useEffect(() => {
         boardService.getAllBoardByTeamId(id).then(res => {
             setListBoard(res)
         })
     }, []);
 
-   // const boards = useSelector((state) => state.boards);
 
     return (
         <div>
@@ -54,9 +55,15 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                             dispatch(boardsSlice.actions.setBoardActive({index}));
                                         }}
                                     >
+
                                         <img src={boardIcon} className="  filter-white  h-4 "/>{" "}
                                         <p className=" text-lg font-bold ">{board.name}</p>
+
+
+
                                     </div>
+
+
                                 ))}
 
                                 <div
@@ -67,9 +74,21 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                 >
                                     <img src={boardIcon} className="   filter-white  h-4 "/>
                                     <p className=" text-lg font-bold  ">Create New Board </p>
+
                                 </div>
+
+                                <Link to={"/createBoard/" + id}>
+                                    <button className="btn btn-warning">Them</button>
+                                </Link>
+
+
+
                             </div>
+
+
                         </div>
+
+
                     </div>
                 </div>
             </div>
