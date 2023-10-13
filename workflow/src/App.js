@@ -9,6 +9,7 @@ import HomeTeams from "./component/home/HomeTeams";
 import Login from "./component/login/Login";
 import CreateHomeTeams from "./component/home/CreateHomeTeams";
 import CreateBoard from "./board/CreateBoard";
+import EditBoard from "./board/EditBoard";
 
 function App() {
     return (

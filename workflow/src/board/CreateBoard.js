@@ -8,17 +8,16 @@ const CreateBoard = () => {
     const navigate = useNavigate();
 
     const {id} = useParams();
+
     return (
         <Formik initialValues={{
             name: "",
             description: "",
             is_Public: true
-
-
-        }} onSubmit={
+        }}
+                onSubmit={
             (values) => {
 
-                console.log("value = " + values.is_Public)
                 boardService.createBoardByTeamId(values, id).then(res => {
                     alert("Create board success")
                     navigate("/b/" + id);
@@ -26,9 +25,8 @@ const CreateBoard = () => {
                     console.log(err);
                 })
             }
-        }
+        }>
 
-        >
             <Form>
                 <div className="container-post">
                     <div>
@@ -49,14 +47,6 @@ const CreateBoard = () => {
 
                             ></Field>
                         </div>
-
-                        {/*<div className="mb-3">*/}
-                        {/*    <Field as = "select" name="is_Public" id="is_Public">*/}
-                        {/*        <option name={'is_Public'} value="true">true</option>*/}
-                        {/*        <option name={'is_Public'} value="false">false</option>*/}
-                        {/*    </Field>*/}
-                        {/*</div>*/}
-
 
                         <div className="mb-3">
                             <button id="btn-form" className="btn btn-primary">Save</button>
