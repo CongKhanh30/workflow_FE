@@ -28,8 +28,8 @@ const CreateHomeTeams = () => {
                         <h1 id="title-form" className="head">Create Product</h1>
 
                         <div className="mb-3">
-                            <label htmlFor="name" className="form-label">name</label>
-                            <Field type="text" className="form-control" name ={'name'} id="title" placeholder="nhap ten"></Field>
+                            <label htmlFor="name" className="form-label">Name</label>
+                            <Field type="text" className="form-control" name ={'name'} id="title" placeholder="Enter name..."></Field>
                         </div>
 
                         <div className="mb-3" >
