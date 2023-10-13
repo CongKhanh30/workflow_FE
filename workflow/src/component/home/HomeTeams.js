@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import teamService from "../service/TeamService";
 import {Link} from "react-router-dom";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import boardService from "../service/BoardService";
 
 const HomeTeams = () => {
     const [listTeam, setListTeam] = useState([]);
@@ -27,62 +29,120 @@ const HomeTeams = () => {
     }
 
     return (
-        <div>
-            <div className="cotainer">
-                <h1 className="head">List Team</h1>
 
-                <Link to={"/createTeam"}>
-                    <button className="btn btn-primary">Add Team</button>
-                </Link>
+        <>
+            <style>
+                {`
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+          }
+          header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+          }
+          h2 {
+            margin: 0;
+          }
+          .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; 
+          }
+          .product {
+            background-color: #fff;
+            border: 5px solid black;
+            padding: 20px;
+            width: calc(20% - 20px); 
+            margin-bottom: 20px;
+            border-radius: 15%;
+            position: relative;
+            left: 250px;
+            
+           }
+        `}
+            </style>
 
-                <table className="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>name</th>
-                        <th>danh sach thanh vien</th>
+            <>
 
-                        <th colSpan="2" className="action">Action</th>
+                <div>
+                    <div className="cotainer">
+                        <h1 className="head">List Team</h1>
 
-                    </tr>
-                    </thead>
+                        <Link to={"/createTeam"}>
+                            <button className="btn btn-primary">Add Team</button>
+                        </Link>
 
-                    <tbody>
 
-                    {listTeam.map((team, index) => {
-                            return (
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>name</th>
+                                <th>danh sach thanh vien</th>
 
-                                <tr key={index}>
-                                    <td>{team.id}</td>
-                                    <td>{team.name}</td>
+                                <th colSpan="2" className="action">Action</th>
 
-                                    <td>{team.members.map((member, index) => {
-                                        return (
-                                            <div key={index}>
-                                                <p>{member}</p>
-                                            </div>
-                                        )
-                                    })}</td>
+                            </tr>
+                            </thead>
 
-                                    <td>
-                                        <Link to={"/b/" + team.id}>
-                                            <button className="btn btn-warning">Detail</button>
-                                        </Link>
-                                    </td>
+                            <tbody>
 
-                                    <td>
-                                        <button className="btn btn-danger" onClick={() => removeTeam(team.id)}>delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            )
-                        }
-                    )}
+                            {listTeam.map((team, index) => {
+                                    return (
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                                        <tr key={index}>
+                                            <td>{team.id}</td>
+                                            <td>{team.name}</td>
+
+                                            <td>{team.members.map((member, index) => {
+                                                return (
+                                                    <div key={index}>
+                                                        <p>{member}</p>
+                                                    </div>
+                                                )
+                                            })}</td>
+
+                                            <td>
+                                                <Link to={"/b/" + team.id}>
+                                                    <button className="btn btn-warning">Detail</button>
+                                                </Link>
+                                            </td>
+
+                                            <td>
+                                                <button className="btn btn-danger"
+                                                        onClick={() => removeTeam(team.id)}>delete
+                                                </button>
+                                            </td>
+
+                                            <td>
+                                                <button type="button" className="btn btn-primary" data-toggle="modal"
+                                                        data-target="#modalEditBoard" onClick={() => {
+
+                                                }}>
+                                                    Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+
+
+                                    )
+                                }
+                            )}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </>
+        </>
     );
 };
 

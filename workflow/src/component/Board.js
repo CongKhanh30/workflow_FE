@@ -32,7 +32,6 @@ const Board = () => {
     if (!activeBoard && listBoard.length > 0)
         dispatch(boardsSlice.actions.setBoardActive({index: 0}));
     return (
-        console.log(listBoard),
             <div className=" overflow-hidden  overflow-x-scroll">
                 <>
                     {listBoard.length > 0 ?
