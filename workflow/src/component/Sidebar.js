@@ -113,8 +113,6 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                             </Formik>
 
                         </div>
-
-
                     </div>
 
                 </div>
