@@ -9,7 +9,8 @@ import boardService from "./service/BoardService";
 import {useParams} from "react-router";
 import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import * as Yup from "yup";
 
 function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
     const dispatch = useDispatch();
@@ -18,6 +19,15 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
 
     const {id} = useParams()
     const navigate = useNavigate();
+
+    const validationSchema = Yup.object({
+        name: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Tên tài khoản không được chứa ký tự đặc biệt')
+            .required('Vui lòng nhập tên đăng nhập')
+            .min(6, 'Tên đăng nhập phải có ít nhất 6 ký tự')
+            .max(15, 'Tên đăng nhập không được quá 15 ký tự'),
+    });
+
 
 
     const [listBoard, setListBoard] = useState([]); // khoi tao state listBoard, state nay dung de lay du lieu tu store
@@ -76,6 +86,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
 
                                 enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
 
+                                validationSchema={validationSchema}
 
                                 onSubmit={
                                     (values) => {
@@ -87,13 +98,12 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                         })
                                     }}>
 
-
                                 <Form>
-
 
                                     <div className="modal-footer">
                                         <Field type="text" className="form-control" name={'name'} id="name"
                                         ></Field>
+                                        <ErrorMessage name="name" component="div" className="text-danger"/>
                                         <button type="submit" className="btn btn-primary"
                                         >Luu lai
                                         </button>
@@ -118,7 +128,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                     }>
 
                     <div>
-                        {/* reWrite modal  */}
+
                         <div className=" bg-blue-300 h-[70%] w-full   py-4 rounded-xl ">
                             <h3 className=" dark:text-gray-300 text-gray-600 font-semibold mx-4 mb-8 ">
                                 ALL BOARDS ({listBoard?.length})
