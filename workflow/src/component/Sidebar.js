@@ -127,7 +127,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
 
                     <div>
 
-                        <div className=" bg-blue-300 h-[70%] w-full   py-4 rounded-xl ">
+                        <div className=" bg-blue-300 h-[70%] w-full py-4 rounded-xl overflow-x-auto">
                             <h3 className=" dark:text-gray-300 text-gray-600 font-semibold mx-4 mb-8 ">
                                 ALL BOARDS ({listBoard?.length})
                             </h3>
@@ -161,7 +161,11 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                             }}>Xoa
                                             </button>
 
+
+
                                         </div>
+
+
 
                                     ))}
 

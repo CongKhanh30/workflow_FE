@@ -28,24 +28,24 @@ const CreateBoard = () => {
         <Formik
 
             initialValues={{
-            name: "",
-            description: "",
-            is_Public: true
-        }}
+                name: "",
+                description: "",
+                isPublic: true
+            }}
 
             validationSchema={validationSchema}
 
             onSubmit={
-            (values) => {
+                (values) => {
 
-                boardService.createBoardByTeamId(values, id).then(res => {
-                    alert("Create board success")
-                    navigate("/b/" + id);
-                }, err => {
-                    console.log(err);
-                })
+                    boardService.createBoardByTeamId(values, id).then(res => {
+                        alert("Create board success")
+                        navigate("/b/" + id);
+                    }, err => {
+                        console.log(err);
+                    })
+                }
             }
-        }
 
 
         >
@@ -61,7 +61,7 @@ const CreateBoard = () => {
                                    placeholder="Nhap ten nhom"
 
                             ></Field>
-                            <ErrorMessage name="name"  component="div" className="text-danger" />
+                            <ErrorMessage name="name" component="div" className="text-danger"/>
                         </div>
 
                         <div className="mb-3">
@@ -69,7 +69,7 @@ const CreateBoard = () => {
                             <Field type="text" className="form-control" name={'description'} id="price"
                                    placeholder="Nhap mieu ta nhom"
                             ></Field>
-                            <ErrorMessage name="description"  component="div" className="text-danger" />
+                            <ErrorMessage name="description" component="div" className="text-danger"/>
                         </div>
 
                         <div className="mb-3">
