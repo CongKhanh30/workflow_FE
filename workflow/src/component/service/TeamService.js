@@ -59,6 +59,26 @@ const teamService = {
                 reject(err)
             });
         })
+    },
+
+    addMember: (member) => {
+        return new Promise((resolve, reject) => {
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'http://localhost:8080/team/add',
+                headers: {
+                    "content-type": "application/json",
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                data: member,
+            }
+            axios.request(config).then(response => {
+                resolve(response.data);
+            }).catch(function (err) {
+                reject(err)
+            });
+        })
     }
 
 };
