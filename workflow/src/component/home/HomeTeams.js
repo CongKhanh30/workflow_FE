@@ -209,7 +209,6 @@ const HomeTeams = () => {
                                             // values = {...values, teamId: idAddMember}
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
-
                                                 toast.success("Add Member Success !")
                                                 window.location.reload();
                                             }).catch(err => {
@@ -220,10 +219,8 @@ const HomeTeams = () => {
                                     <Form>
 
                                         <div className="modal-footer">
-                                            <Field type="text" className="form-control" name={'teamId'} id="teamId"
+                                            <Field  type="hidden" className="form-control" name={'teamId'} id="teamId"
                                             ></Field>
-                                            <ErrorMessage name="teamId" component="div" className="text-danger"/>
-
                                             <Field type="text" className="form-control" name={'username'} id="username"
                                             ></Field>
                                             <ErrorMessage name="username" component="div" className="text-danger"/>
@@ -239,7 +236,7 @@ const HomeTeams = () => {
                                             <ErrorMessage name="permissionId" component="div" className="text-danger"/>
 
                                             <button type="submit" className="btn btn-primary"
-                                            >Luu lai
+                                            >Save
                                             </button>
                                         </div>
                                     </Form>
