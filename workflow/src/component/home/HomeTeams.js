@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import permissionService from "../service/PermissionService";
+import {toast} from "react-toastify";
 
 const HomeTeams = () => {
 
@@ -25,6 +26,7 @@ const HomeTeams = () => {
     });
 
     const [listTeam, setListTeam] = useState([]);
+    const [load , setLoad] = useState(false);
 
     useEffect(() => {
             teamService.getAllTeam().then(res => {
@@ -32,7 +34,7 @@ const HomeTeams = () => {
             }).catch(err => {
                 console.log(err);
             });
-        }, []
+        }, [load]
     );
 
     const [listPermission, setPermission] = useState([]);
@@ -46,11 +48,11 @@ const HomeTeams = () => {
     );
 
     const removeTeam = (id) => {
-        const confirm = window.confirm("Are you sure delete this tour?");
+        const confirm = window.confirm("Bạn có muốn xóa nhóm này?");
         if (confirm === true) {
             teamService.removeTeam(id).then(res => {
-                alert("Delete success");
-                window.location.reload();
+                toast.success("Xóa Nhóm Thành Công !")
+                setLoad(!load);
             }).catch(err => {
                 console.log(err);
             });
@@ -67,108 +69,108 @@ const HomeTeams = () => {
         <>
             <style>
                 {`
-           body {
+            body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #F9F9F9;
             }
         
-        .head {
-            font-weight: bold;
-        }
-        p {
-            color: black;
-        }
-        p:hover{
-        color: #5279cb;
-        }
-        h1 {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
-            color: black;
-        }
-        #sidebar {
-            width: 250px;
-            height: 100%;
-            background: #CDDAF3;
-            position: fixed;
-        }
-
-        #sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        #sidebar ul li {
-            padding: 10px;
-        }
-
-        #sidebar ul li a {
-            color: black;
-            text-decoration: none;
-        }
-
-        #content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-
-        #content h1 {
-            font-size: 24px;
-        }
-
-        .group-list { 
-            margin-top: 20px;
-            max-height: 350px; /* Chiều cao tối đa cho danh sách nhóm */
-            overflow-y: auto; /* Thanh cuộn dọc */
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }   
-        ::-webkit-scrollbar-thumb {
-        background: #84abfa; 
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: #5279cb; 
-        }
-        .group-item {
-            display: flex;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            padding: 10px;
-            background-color: #CDDAF3;
-        }
-
-        .group-item a {
+            .head {
+                font-weight: bold;
+            }
+            p {
+                color: black;
+            }
+            p:hover{
+            color: #5279cb;
+            }
+            h1 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 40px;
+                color: black;
+            }
+            #sidebar {
+                width: 250px;
+                height: 100%;
+                background: #CDDAF3;
+                position: fixed;
+            }
+    
+            #sidebar ul {
+                list-style-type: none;
+                padding: 0;
+            }
+    
+            #sidebar ul li {
+                padding: 10px;
+            }
+    
+            #sidebar ul li a {
+                color: black;
+                text-decoration: none;
+            }
+    
+            #content {
+                margin-left: 250px;
+                padding: 20px;
+            }
+    
+            #content h1 {
+                font-size: 24px;
+            }
+    
+            .group-list { 
+                margin-top: 20px;
+                max-height: 350px; /* Chiều cao tối đa cho danh sách nhóm */
+                overflow-y: auto; /* Thanh cuộn dọc */
+            }
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }   
+            ::-webkit-scrollbar-thumb {
+            background: #84abfa; 
+            }
+            ::-webkit-scrollbar-thumb:hover {
+              background: #5279cb; 
+            }
+            .group-item {
+                display: flex;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                background-color: #CDDAF3;
+            }
+    
+            .group-item a {
+                
+                text-decoration: none;
+                color: #333;
+            }
+    
+            .group-item {
+                margin-top: 10px;
+            }
             
-            text-decoration: none;
-            color: #333;
-        }
-
-        .group-item {
-            margin-top: 10px;
-        }
-        
-        .group-actions {
-            width : 50%;
-        }
-        
-        member-list {
-            width : 50%;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            padding: 10px;
-            background-color: #f9f9f9;
-        }
-
-        .member-list a {
-            text-decoration: none;
-            color: #333;
-        }
-        `}
+            .group-actions {
+                width : 50%;
+            }
+            
+            member-list {
+                width : 50%;
+                margin-top: 10px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                background-color: #f9f9f9;
+            }
+    
+            .member-list a {
+                text-decoration: none;
+                color: #333;
+            }
+            `}
             </style>
 
             <>
@@ -208,7 +210,7 @@ const HomeTeams = () => {
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
 
-                                                alert("Update success")
+                                                toast.success("Add Member Success !")
                                                 window.location.reload();
                                             }).catch(err => {
                                                 console.log(err);

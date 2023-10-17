@@ -90,11 +90,6 @@ const Login = () => {
                                                 </div>
                                                 <div className="col-md-12">
 
-                                                    <div className="d-flex justify-content-between mb-3">
-                                                        <a className="text-color" href="#">Change password?</a>
-
-                                                    </div>
-
                                                     <button type="submit" className="btn btn-primary btn-pill mb-4" style={{marginLeft: "32%"}}>
                                                         Sign In
                                                     </button>
