@@ -6,6 +6,7 @@ import useDarkMode from "../hooks/UseDarkMode";
 import darkIcon from "../assets/icon-dark-theme.svg";
 import lightIcon from "../assets/icon-light-theme.svg";
 import boardsSlice from "../redux/boardsSlice";
+import getCol from "./service/ColService";
 
 
 function HeaderDropDown({ setOpenDropdown, setIsBoardModalOpen }) {
@@ -52,7 +53,9 @@ function HeaderDropDown({ setOpenDropdown, setIsBoardModalOpen }) {
               }}
             >
               <img src={boardIcon} className="  filter-white  h-4 " />{" "}
-              <p className=" text-lg font-bold  ">{board.name}</p>
+              <button className=" text-lg font-bold  " onClick={() => getCol(board.id)}>
+                {board.name}
+              </button>
             </div>
           ))}
 

@@ -54,11 +54,13 @@ const HomeTeams = () => {
           }
           .product {
             background-color: #fff;
-            border: 5px solid #ddd;
+            border: 5px solid black;
             padding: 20px;
             width: calc(20% - 20px); 
             margin-bottom: 20px;
-            border-radius: 15%
+            border-radius: 15%;
+            position: relative;
+            left: 250px;
             
            }
         `}
