@@ -14,7 +14,7 @@ const CreateHomeTeams = () => {
             .matches(/^[a-zA-Z0-9]*$/, 'Tên nhóm không được chứa ký tự đặc biệt')
             .required('Vui lòng nhập tên nhóm')
             .min(6, 'Tên nhóm phải có ít nhất 6 ký tự')
-            .max(15, 'Tên nhóm không được quá 32 ký tự'),
+            .max(15, 'Tên nhóm không được quá 15 ký tự'),
 
     });
 

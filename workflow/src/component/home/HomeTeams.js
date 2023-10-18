@@ -209,7 +209,7 @@ const HomeTeams = () => {
                                             // values = {...values, teamId: idAddMember}
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
-                                                toast.success("Add Member Success !")
+                                                toast.success("Thêm Thành Viên Thành Công!")
                                                 setLoad(!load);
                                             }).catch(err => {
                                                 console.log(err);
