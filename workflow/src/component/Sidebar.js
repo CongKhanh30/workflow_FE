@@ -11,6 +11,7 @@ import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
     const dispatch = useDispatch();
@@ -34,7 +35,9 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
 
     useEffect(() => {
         boardService.getAllBoardByTeamId(id).then(res => {
+            if (res.length> 0) {
             setListBoard(res)
+            }
         })
     }, []);
 
@@ -50,6 +53,13 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
         }
     }
 
+    // const [listCol, setListCol] = useState([]); // khoi tao state listBoard, state nay dung de lay du lieu tu store
+    // useEffect(() => {
+    //     boardService.getAllBoardByTeamId(id).then(res => {
+    //         console.log(res)
+    //         setListCol(res)
+    //     })
+    // });
 
     const [board, setBoard] = useState({});
     const findBoardById = (idBoard) => {
@@ -134,7 +144,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
 
                             <div className="  dropdown-borad flex flex-col h-[75vh] justify-between overflow-auto">
                                 <div>
-                                    {listBoard.map((board, index) => (
+                                    {listBoard?.map((board, index) => (
                                         <div
                                             className={` flex items-baseline space-x-2 px-5 mr-8 rounded-r-full duration-500 ease-in-out py-4 cursor-pointer hover:bg-[#635fc71a] hover:text-[#635fc7] dark:hover:bg-white dark:hover:text-[#635fc7] dark:text-white  ${
                                                 board.isActive &&
@@ -147,7 +157,20 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                         >
 
                                             <img src={boardIcon} className="  filter-white  h-4 "/>{" "}
-                                            <p className=" text-lg font-bold ">{board.name}</p>
+
+                                            {/*<p className=" text-lg font-bold ">{board.name}</p>*/}
+                                            <div
+                                                className={` flex items-baseline space-x-2 px-5 mr-8 rounded-r-full duration-500 ease-in-out py-4 cursor-pointer hover:bg-[#635fc71a] hover:text-[#635fc7] dark:hover:bg-white dark:hover:text-[#635fc7] dark:text-white  ${
+                                                    board.isActive &&
+                                                    " bg-[#635fc7] rounded-r-full text-white mr-8 "
+                                                } `}
+                                                key={index}
+                                                onClick={() => {
+                                                    dispatch(boardsSlice.actions.setBoardActive({index}));
+                                                }}
+                                            >
+                                                <p className=" text-lg font-bold ">{board.name}</p>
+                                            </div>
 
                                             <button type="button" className="btn btn-primary" data-toggle="modal"
                                                     data-target="#modalEditBoard" onClick={() => {
@@ -155,6 +178,8 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                             }}>
                                                 Edit
                                             </button>
+
+
 
                                             <button className="btn btn-danger" onClick={() => {
                                                 removeBoard(board.id)

@@ -5,8 +5,13 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import permissionService from "../service/PermissionService";
 import {toast} from "react-toastify";
+import boardService from "../service/BoardService";
+import boardsSlice from "../../redux/boardsSlice";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router";
 
 const HomeTeams = () => {
+    const dispatch = useDispatch();
 
     const validationSchema = Yup.object({
         teamId: Yup.string()
@@ -26,7 +31,7 @@ const HomeTeams = () => {
     });
 
     const [listTeam, setListTeam] = useState([]);
-    const [load , setLoad] = useState(false);
+    const [load, setLoad] = useState(false);
 
     useEffect(() => {
             teamService.getAllTeam().then(res => {
@@ -58,11 +63,28 @@ const HomeTeams = () => {
             });
         }
     }
+    const navigate = useNavigate();
 
     const [idAddMember, setIdAddMember] = useState('');
     const addMember = (id) => {
         setIdAddMember(id);
     }
+    const showBoard = (id) => {
+        boardService.getAllBoardByTeamId(id).then(res => {
+                if (res.length > 0) {
+                    res = res?.map((board) => {
+                        return {...board, isActive: false}
+                    })
+                    res[0].isActive = true;
+                    dispatch(boardsSlice.actions.setBoard(res));
+                    navigate("/b/" + id)
+                } else {
+                    navigate("/b/" + id)
+                }
+            }
+        )
+    }
+
 
     return (
 
@@ -219,7 +241,7 @@ const HomeTeams = () => {
                                     <Form>
 
                                         <div className="modal-footer">
-                                            <Field  type="hidden" className="form-control" name={'teamId'} id="teamId"
+                                            <Field type="hidden" className="form-control" name={'teamId'} id="teamId"
                                             ></Field>
                                             <Field type="text" className="form-control" name={'username'} id="username"
                                             ></Field>
@@ -235,7 +257,7 @@ const HomeTeams = () => {
                                             </Field>
                                             <ErrorMessage name="permissionId" component="div" className="text-danger"/>
 
-                                            <button  type="submit" className="btn btn-primary"
+                                            <button type="submit" className="btn btn-primary"
                                             >Save
                                             </button>
                                         </div>
@@ -272,14 +294,32 @@ const HomeTeams = () => {
                                                 <div className="group-list">
                                                     <div className="group-item">
                                                         <div className="group-actions">
-                                                            <Link to={"/b/" + team.id}>
-                                                                <span style={{fontSize: "1.2rem", paddingLeft:"30px"}}>{team.name}</span><br/>
-                                                            </Link>
-                                                            <button className="btn btn-pill btn-danger" style={{ height:"2rem", padding: "0.4rem", fontSize: "0.8rem"}}
+
+                                                            {/*<Link to={"/b/" + team.id}>*/}
+                                                            {/*    <span style={{fontSize: "1.2rem", paddingLeft:"30px"}}>{team.name}</span><br/>*/}
+                                                            {/*</Link>*/}
+
+                                                            <p onClick={() => showBoard(team.id)}>
+
+                                                                <span style={{
+                                                                    fontSize: "1.2rem",
+                                                                    paddingLeft: "30px"
+                                                                }}>{team.name}</span><br/>
+                                                            </p>
+
+                                                            <button className="btn btn-pill btn-danger" style={{
+                                                                height: "2rem",
+                                                                padding: "0.4rem",
+                                                                fontSize: "0.8rem"
+                                                            }}
                                                                     onClick={() => removeTeam(team.id)}>Delete
                                                             </button>
                                                             <span> </span>
-                                                            | <button className="btn btn-pill btn-smoke" style={{ height:"2rem", padding: "0.4rem", fontSize: "0.8rem"}} data-toggle="modal"
+                                                            | <button className="btn btn-pill btn-smoke" style={{
+                                                            height: "2rem",
+                                                            padding: "0.4rem",
+                                                            fontSize: "0.8rem"
+                                                        }} data-toggle="modal"
                                                                       data-target="#modalAddMember"
                                                                       onClick={() => {
                                                                           addMember(team.id)
