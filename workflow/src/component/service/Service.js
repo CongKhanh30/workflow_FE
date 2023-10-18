@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {Axios} from "axios";
 
 const service = {
 
@@ -24,26 +24,31 @@ const service = {
                 });
         });
     },
+    editPassword:(currentPassword,newPassword)=>{
+        return new Promise((resolve, reject)=>{
 
-
-    getAllBoard: () => {
-        return new Promise((resolve, reject) => {
             let config = {
-                method: 'get',
+                method: 'put',
                 maxBodyLength: Infinity,
-                url: 'http://localhost:8080/board',
+                url: `http://localhost:8080/changePassword?currentPassword=${currentPassword}&newPassword=${newPassword}`,
                 headers: {
-                    'Accept': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
-            }
-            axios.request(config).then(response => {
-                resolve(response.data);
-            }).catch(function (err) {
-                reject(err)
-            });
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    console.log(JSON.stringify(response.data));
+                    resolve(response.data)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error)
+                });
+
         })
     }
+
 };
 
 // tao constructor

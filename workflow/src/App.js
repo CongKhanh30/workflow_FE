@@ -11,6 +11,7 @@ import CreateHomeTeams from "./component/home/CreateHomeTeams";
 import CreateBoard from "./board/CreateBoard";
 import Column from "./component/Column";
 import Home from "./component/Home";
+import ChangePassword from "./component/login/ChangePassword";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
             <Routes>
                 <Route path={"/login"} element={<Login/>}></Route>
                 <Route path={"/register"} element={<Register/>}></Route>
+                <Route path={"/changePassword"} element={<ChangePassword/>}></Route>
                 <Route path="/homeTeam" element={<HomeTeams/>} />
                 {/*<Route path={'/b/:id'} element={<Board/>}/>*/}
                 <Route path={'/createTeam'} element={<CreateHomeTeams/>}/>

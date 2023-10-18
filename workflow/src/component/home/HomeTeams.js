@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import teamService from "../service/TeamService";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import permissionService from "../service/PermissionService";
+import {toast} from "react-toastify";
 import boardService from "../service/BoardService";
 import boardsSlice from "../../redux/boardsSlice";
 import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router";
 
 const HomeTeams = () => {
     const dispatch = useDispatch();
@@ -29,13 +31,15 @@ const HomeTeams = () => {
     });
 
     const [listTeam, setListTeam] = useState([]);
+    const [load , setLoad] = useState(false);
+
     useEffect(() => {
             teamService.getAllTeam().then(res => {
                 setListTeam(res);
             }).catch(err => {
                 console.log(err);
             });
-        }, []
+        }, [load]
     );
 
     const [listPermission, setPermission] = useState([]);
@@ -49,11 +53,11 @@ const HomeTeams = () => {
     );
 
     const removeTeam = (id) => {
-        const confirm = window.confirm("Are you sure delete this tour?");
+        const confirm = window.confirm("Bạn có muốn xóa nhóm này?");
         if (confirm === true) {
             teamService.removeTeam(id).then(res => {
-                alert("Delete success");
-                window.location.reload();
+                toast.success("Xóa Nhóm Thành Công !")
+                setLoad(!load);
             }).catch(err => {
                 console.log(err);
             });
@@ -87,41 +91,108 @@ const HomeTeams = () => {
         <>
             <style>
                 {`
-          body {
+            body {
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
             margin: 0;
             padding: 0;
-          }
-          header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-          }
-          h2 {
-            margin: 0;
-          }
-          .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between; 
-          }
-          .product {
-            background-color: #fff;
-            border: 5px solid black;
-            padding: 20px;
-            width: calc(20% - 20px); 
-            margin-bottom: 20px;
-            border-radius: 15%;
-            position: relative;
-            left: 250px;
+            background-color: #F9F9F9;
+            }
+        
+            .head {
+                font-weight: bold;
+            }
+            p {
+                color: black;
+            }
+            p:hover{
+            color: #5279cb;
+            }
+            h1 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 40px;
+                color: black;
+            }
+            #sidebar {
+                width: 250px;
+                height: 100%;
+                background: #CDDAF3;
+                position: fixed;
+            }
+    
+            #sidebar ul {
+                list-style-type: none;
+                padding: 0;
+            }
+    
+            #sidebar ul li {
+                padding: 10px;
+            }
+    
+            #sidebar ul li a {
+                color: black;
+                text-decoration: none;
+            }
+    
+            #content {
+                margin-left: 250px;
+                padding: 20px;
+            }
+    
+            #content h1 {
+                font-size: 24px;
+            }
+    
+            .group-list { 
+                margin-top: 20px;
+                max-height: 350px; /* Chiều cao tối đa cho danh sách nhóm */
+                overflow-y: auto; /* Thanh cuộn dọc */
+            }
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }   
+            ::-webkit-scrollbar-thumb {
+            background: #84abfa; 
+            }
+            ::-webkit-scrollbar-thumb:hover {
+              background: #5279cb; 
+            }
+            .group-item {
+                display: flex;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                background-color: #CDDAF3;
+            }
+    
+            .group-item a {
+                
+                text-decoration: none;
+                color: #333;
+            }
+    
+            .group-item {
+                margin-top: 10px;
+            }
             
-           }
-        `}
+            .group-actions {
+                width : 50%;
+            }
+            
+            member-list {
+                width : 50%;
+                margin-top: 10px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                background-color: #f9f9f9;
+            }
+    
+            .member-list a {
+                text-decoration: none;
+                color: #333;
+            }
+            `}
             </style>
 
             <>
@@ -160,9 +231,8 @@ const HomeTeams = () => {
                                             // values = {...values, teamId: idAddMember}
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
-
-                                                alert("Update success")
-                                                window.location.reload();
+                                                toast.success("Add Member Success !")
+                                                setLoad(!load);
                                             }).catch(err => {
                                                 console.log(err);
                                             });
@@ -171,10 +241,8 @@ const HomeTeams = () => {
                                     <Form>
 
                                         <div className="modal-footer">
-                                            <Field type="text" className="form-control" name={'teamId'} id="teamId"
+                                            <Field  type="hidden" className="form-control" name={'teamId'} id="teamId"
                                             ></Field>
-                                            <ErrorMessage name="teamId" component="div" className="text-danger"/>
-
                                             <Field type="text" className="form-control" name={'username'} id="username"
                                             ></Field>
                                             <ErrorMessage name="username" component="div" className="text-danger"/>
@@ -189,8 +257,8 @@ const HomeTeams = () => {
                                             </Field>
                                             <ErrorMessage name="permissionId" component="div" className="text-danger"/>
 
-                                            <button type="submit" className="btn btn-primary"
-                                            >Luu lai
+                                            <button  type="submit" className="btn btn-primary"
+                                            >Save
                                             </button>
                                         </div>
                                     </Form>
@@ -205,79 +273,61 @@ const HomeTeams = () => {
 
 
                 <div>
-                    <div className="cotainer">
-                        <h1 className="head">List Team</h1>
-
-                        <Link to={"/createTeam"}>
-                            <button className="btn btn-primary">Add Team</button>
-                        </Link>
-
-
-                        <table className="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>name</th>
-                                <th>danh sach thanh vien</th>
-
-                                <th colSpan="2" className="action">Action</th>
-
-                            </tr>
-                            </thead>
-
-                            <tbody>
-
-                            {listTeam.map((team, index) => {
-                                    return (
-
-                                        <tr key={index}>
-                                            <td>{team.id}</td>
-                                            <td>{team.name}</td>
-
-                                            <td>{team.members.map((member, index) => {
-                                                return (
-                                                    <div key={index}>
-                                                        <p>{member}</p>
+                    <div>
+                        <div className="container">
+                            <h1 className="head">DANH SÁCH NHÓM</h1>
+                            <div id="sidebar">
+                                <ul>
+                                    <li><a href="#">Đổi thông tin cá nhân</a></li>
+                                    <Link to={"/changePassword"}>
+                                        <li><p>Đổi mật khẩu</p></li>
+                                    </Link>
+                                </ul>
+                            </div>
+                            <div id="content">
+                                <Link to={"/createTeam"}>
+                                    <button className="btn btn-info">Thêm Nhóm Mới</button>
+                                </Link>
+                                <div style={{height: "80vh", overflow: "auto", marginTop: "15px"}}>
+                                    {listTeam.map((team, index) => {
+                                            return (
+                                                <div className="group-list">
+                                                    <div className="group-item">
+                                                        <div className="group-actions">
+                                                            <Link to={"/b/" + team.id}>
+                                                                <span style={{fontSize: "1.2rem", paddingLeft:"30px"}}>{team.name}</span><br/>
+                                                            </Link>
+                                                            <button className="btn btn-pill btn-danger" style={{ height:"2rem", padding: "0.4rem", fontSize: "0.8rem"}}
+                                                                    onClick={() => removeTeam(team.id)}>Delete
+                                                            </button>
+                                                            <span> </span>
+                                                            | <button className="btn btn-pill btn-smoke" style={{ height:"2rem", padding: "0.4rem", fontSize: "0.8rem"}} data-toggle="modal"
+                                                                      data-target="#modalAddMember"
+                                                                      onClick={() => {
+                                                                          addMember(team.id)
+                                                                      }
+                                                                      }>
+                                                            Add Member
+                                                        </button>
+                                                        </div>
+                                                        <div className="member-list">
+                                                            <p style={{fontSize: "1.2rem"}}>Danh sách thành viên: </p>
+                                                            <p>{team.members.map((member, index) => {
+                                                                return (
+                                                                    <span key={index}>
+                                                                {member}<span> </span>
+                                                            </span>
+                                                                )
+                                                            })}</p>
+                                                        </div>
                                                     </div>
-                                                )
-                                            })}</td>
-
-                                            <td>
-
-                                                <button onClick={() => showBoard(team.id)}
-                                                        className="btn btn-warning">Detail
-                                                </button>
-
-                                            </td>
-
-                                            <td>
-                                                <button className="btn btn-danger"
-                                                        onClick={() => removeTeam(team.id)}>delete
-                                                </button>
-                                            </td>
-
-
-                                            <td>
-
-                                                <button type="button" className="btn btn-primary" data-toggle="modal"
-                                                        data-target="#modalAddMember"
-                                                        onClick={() => {
-                                                            addMember(team.id)
-                                                        }
-                                                        }>
-                                                    Them Nguoi
-                                                </button>
-
-                                            </td>
-                                        </tr>
-
-
-                                    )
-                                }
-                            )}
-
-                            </tbody>
-                        </table>
+                                                </div>
+                                            )
+                                        }
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </>
