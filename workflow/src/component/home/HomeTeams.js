@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import teamService from "../service/TeamService";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import permissionService from "../service/PermissionService";
+import boardService from "../service/BoardService";
+import boardsSlice from "../../redux/boardsSlice";
+import {useDispatch} from "react-redux";
 
 const HomeTeams = () => {
+    const dispatch = useDispatch();
 
     const validationSchema = Yup.object({
         teamId: Yup.string()
@@ -55,11 +59,28 @@ const HomeTeams = () => {
             });
         }
     }
+    const navigate = useNavigate();
 
     const [idAddMember, setIdAddMember] = useState('');
     const addMember = (id) => {
         setIdAddMember(id);
     }
+    const showBoard = (id) => {
+        boardService.getAllBoardByTeamId(id).then(res => {
+                if (res.length > 0) {
+                    res = res?.map((board) => {
+                        return {...board, isActive: false}
+                    })
+                    res[0].isActive = true;
+                    dispatch(boardsSlice.actions.setBoard(res));
+                    navigate("/b/" + id)
+                }else {
+                    navigate("/b/" + id)
+                }
+            }
+        )
+    }
+
 
     return (
 
@@ -222,9 +243,11 @@ const HomeTeams = () => {
                                             })}</td>
 
                                             <td>
-                                                <Link to={"/b/" + team.id}>
-                                                    <button className="btn btn-warning">Detail</button>
-                                                </Link>
+
+                                                <button onClick={() => showBoard(team.id)}
+                                                        className="btn btn-warning">Detail
+                                                </button>
+
                                             </td>
 
                                             <td>
@@ -232,6 +255,7 @@ const HomeTeams = () => {
                                                         onClick={() => removeTeam(team.id)}>delete
                                                 </button>
                                             </td>
+
 
                                             <td>
 

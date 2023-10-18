@@ -3,7 +3,7 @@ import data from "../data.json";
 
 const boardsSlice = createSlice({
     name: "boards", // ten cua action
-    initialState: data.boards, // gia tri ban dau cua state la data.boards
+    initialState: [], // gia tri ban dau cua state la data.boards
     // initialState: [],
 
     reducers: {
@@ -19,6 +19,13 @@ const boardsSlice = createSlice({
             state.push(board);
         },
 
+        setBoard: (state, action) => {
+            console.log("action.payload", action.payload)
+            return (state = [...action.payload]
+            );
+        },
+
+
         editBoard: (state, action) => {
             const payload = action.payload;
             const board = state.find((board) => board.isActive);
@@ -30,10 +37,13 @@ const boardsSlice = createSlice({
             state.splice(state.indexOf(board), 1);
         },
         setBoardActive: (state, action) => {
+            console.log("action.payload", action.payload)
+            console.log("state", state.boards)
             state.map((board, index) => {
                 index === action.payload.index
                     ? (board.isActive = true)
                     : (board.isActive = false);
+                console.log("board", board)
                 return board;
             });
         },
