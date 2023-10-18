@@ -210,7 +210,7 @@ const HomeTeams = () => {
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
                                                 toast.success("Add Member Success !")
-                                                window.location.reload();
+                                                setLoad(!load);
                                             }).catch(err => {
                                                 console.log(err);
                                             });
@@ -235,7 +235,7 @@ const HomeTeams = () => {
                                             </Field>
                                             <ErrorMessage name="permissionId" component="div" className="text-danger"/>
 
-                                            <button type="submit" className="btn btn-primary"
+                                            <button  type="submit" className="btn btn-primary"
                                             >Save
                                             </button>
                                         </div>
@@ -257,7 +257,7 @@ const HomeTeams = () => {
                             <div id="sidebar">
                                 <ul>
                                     <li><a href="#">Đổi thông tin cá nhân</a></li>
-                                    <Link to={"/changePassword/:id"}>
+                                    <Link to={"/changePassword"}>
                                         <li><p>Đổi mật khẩu</p></li>
                                     </Link>
                                 </ul>

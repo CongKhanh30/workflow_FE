@@ -46,12 +46,14 @@ const Register = () => {
             .min(6, "Mật khẩu có ít nhất 6 ký tự!")
             .max(32, "Mật khẩu không dài quá 32 ký tự!")
             .required("Mật khẩu không được để trống"),
+
         cpassword: Yup.string()
             .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải giống với mật khẩu')
             .matches(/^[a-zA-Z0-9]*$/, 'MK không được chứa ký tự đặc biệt')
             .min(6, "Mật khẩu có ít nhất 6 ký tự!")
             .max(32, "Mật khẩu không dài quá 32 ký tự!")
             .required("Mật khẩu không được để trống")
+
     });
 
     return (
