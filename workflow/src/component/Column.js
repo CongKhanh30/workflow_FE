@@ -68,7 +68,7 @@ function Column({colIndex, dataSidebar}) {
 
                     {col.cards.map((task, index) => (
                         <Task key={index} taskIndex={index} task={task} colIndex={colIndex}/>
-                    ))})
+                    ))}
                     </>
 
                     : null
