@@ -231,7 +231,7 @@ const HomeTeams = () => {
                                             // values = {...values, teamId: idAddMember}
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
-                                                toast.success("Thêm Thành Viên Thành Công!")
+                                                toast.success(res);
                                                 setLoad(!load);
                                             }).catch(err => {
                                                 console.log(err);
