@@ -33,7 +33,7 @@ const CreateHomeTeams = () => {
                 }
                 
                 .modal {
-                    background: rgba(0, 0, 0, 0.5);
+                    background: #CDDAF3;
                     position: fixed;
                     top: 0;
                     left: 0;

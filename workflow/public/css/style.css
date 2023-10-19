@@ -2446,7 +2446,7 @@ textarea.form-control {
 .btn {
   display: inline-block;
   font-weight: 400;
-  color: #8a909d;
+  color: #e2e7f1;
   text-align: center;
   vertical-align: middle;
   -webkit-user-select: none;
@@ -2607,7 +2607,6 @@ fieldset:disabled a.btn {
 .btn-warning {
   color: #2f2f2f;
   background-color: #fec400;
-  border-color: #fec400;
 }
 .btn-warning:hover {
   color: #2f2f2f;
