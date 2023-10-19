@@ -31,11 +31,15 @@ function Home() {
   const columns = useSelector((state) => {
     for (const b of state.boards) { // duyệt qua mảng boards trong store
       if (b.isActive) { // nếu isActive = true
+        console.log("b", b)
         return b.cols // trả về mảng các cột của board đó
       }
     }
     return [];
   });
+
+  // khi click vào tên bảng sẽ thay đổi thuộc tính isActive của bảng đó thành true và các bảng còn lại thành false
+    // const activeBoard = boards.find((board) => board.isActive);
 
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);

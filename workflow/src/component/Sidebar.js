@@ -11,7 +11,6 @@ import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 
 function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
     const dispatch = useDispatch();
@@ -20,6 +19,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
 
     const {id} = useParams()
     const navigate = useNavigate();
+    const [ellipsis, setEllipsis] = useState(false);
 
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -68,6 +68,16 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
         })
     };
 
+    const menuBoard = (id) => {
+        if (ellipsis == true) { // ellipsis la 3 cham
+            document.getElementById(`ellipsis${id}`).style.display = 'none';
+            setEllipsis(false)
+        } else {
+            setEllipsis(true);
+            document.getElementById(`ellipsis${id}`).style.display = 'block';
+        }
+    }
+
 
     return (
 
@@ -115,7 +125,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                         ></Field>
                                         <ErrorMessage name="name" component="div" className="text-danger"/>
                                         <button type="submit" className="btn btn-primary"
-                                        >Luu lai
+                                        >Lưu lại
                                         </button>
                                     </div>
                                 </Form>
@@ -145,22 +155,9 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                             <div className="  dropdown-borad flex flex-col h-[75vh] justify-between overflow-auto">
                                 <div>
                                     {listBoard?.map((board, index) => (
-                                        <div
-                                            className={` flex items-baseline space-x-2 px-5 mr-8 rounded-r-full duration-500 ease-in-out py-4 cursor-pointer hover:bg-[#635fc71a] hover:text-[#635fc7] dark:hover:bg-white dark:hover:text-[#635fc7] dark:text-white  ${
-                                                board.isActive &&
-                                                " bg-[#635fc7] rounded-r-full text-white mr-8 "
-                                            } `}
-                                            key={index}
-                                            onClick={() => {
-                                                dispatch(boardsSlice.actions.setBoardActive({index}));
-                                            }}
-                                        >
-
-                                            <img src={boardIcon} className="  filter-white  h-4 "/>{" "}
-
-                                            {/*<p className=" text-lg font-bold ">{board.name}</p>*/}
+                                        <>
                                             <div
-                                                className={` flex items-baseline space-x-2 px-5 mr-8 rounded-r-full duration-500 ease-in-out py-4 cursor-pointer hover:bg-[#635fc71a] hover:text-[#635fc7] dark:hover:bg-white dark:hover:text-[#635fc7] dark:text-white  ${
+                                                className={` flex items-baseline space-x-2 px-2 mr-0 rounded-r-full duration-500 ease-in-out py-4 cursor-pointer hover:bg-[#635fc71a] hover:text-[#635fc7] dark:hover:bg-white dark:hover:text-[#635fc7] dark:text-white  ${
                                                     board.isActive &&
                                                     " bg-[#635fc7] rounded-r-full text-white mr-8 "
                                                 } `}
@@ -169,46 +166,48 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                                     dispatch(boardsSlice.actions.setBoardActive({index}));
                                                 }}
                                             >
-                                                <p className=" text-lg font-bold ">{board.name}</p>
+                                                <img src={boardIcon} className="  filter-white  h-4 "/>{" "}
+                                                <p className=" text-lg font-bold " >{board.name}</p>
+
+                                                <div>
+                                                    <button onClick={() => menuBoard(board.id)} className="menu-button-post">
+                                                                            <span>
+                                                                            <i className="fa fa-ellipsis-v"></i>
+                                                                            </span>
+                                                    </button>
+                                                </div>
                                             </div>
+                                            <div id={"ellipsis" + board.id} style={{display: 'none'}} className="menu-div-post">
+                                                <div className="menu-board">
+                                                    <span>
+                                                        <button className="menu-board-1" data-toggle="modal"
+                                                                data-target="#modalEditBoard" onClick={() => {
+                                                            findBoardById(board.id)
+                                                        }}>Edit</button>
 
-                                            <button type="button" className="btn btn-primary" data-toggle="modal"
-                                                    data-target="#modalEditBoard" onClick={() => {
-                                                findBoardById(board.id)
-                                            }}>
-                                                Edit
-                                            </button>
-
-
-
-                                            <button className="btn btn-danger" onClick={() => {
-                                                removeBoard(board.id)
-                                            }}>Xoa
-                                            </button>
-
-
-
-                                        </div>
-
-
+                                                        <button className="menu-board-2" onClick={() => {
+                                                            removeBoard(board.id)
+                                                        }}>Delete</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </>
 
                                     ))}
 
                                     <div
-                                        className=" flex  items-baseline space-x-2  mr-8 rounded-r-full duration-500 ease-in-out cursor-pointer text-[#635fc7] px-5 py-4 hover:bg-[#635fc71a] hover:text-[#635fc7] dark:hover:bg-white  "
+                                        className=" flex  items-baseline space-x-2  mr-8 rounded-r-full duration-500 ease-in-out cursor-pointer text-[#635fc7] px-2 py-4 hover:bg-[#635fc71a] hover:text-[#635fc7] dark:hover:bg-white  "
                                         onClick={() => {
                                             setIsBoardModalOpen(true);
                                         }}
                                     >
-                                        <img src={boardIcon} className="   filter-white  h-4 "/>
-                                        <p className=" text-lg font-bold  ">Create New Board </p>
+                                        <p className=" text-lg font-bold  ">
+                                            <Link to={"/createBoard/" + id}>
+                                                <button className="btn btn-info">Thêm bảng mới</button>
+                                            </Link>
+                                        </p>
 
                                     </div>
-
-                                    <Link to={"/createBoard/" + id}>
-                                        <button className="btn btn-warning">Them</button>
-                                    </Link>
-
                                 </div>
 
                             </div>
