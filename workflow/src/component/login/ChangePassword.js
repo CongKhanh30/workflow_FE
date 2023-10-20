@@ -26,7 +26,9 @@ const ChangePassword = () => {
         Service.editPassword(currentPassword, newPassword)
             .then(() => {
                 toast.success('Thay đổi mật khẩu thành công');
+                localStorage.removeItem("token");
                 navigate('/login');
+
             })
             .catch(() => {
                 toast.error('Không thể thay đổi mật khẩu');
