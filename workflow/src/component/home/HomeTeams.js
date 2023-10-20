@@ -84,8 +84,10 @@ const HomeTeams = () => {
             }
         )
     }
-
-
+    const Logout = () => {
+            localStorage.removeItem("token");
+            navigate("/login");
+    }
     return (
 
         <>
@@ -279,6 +281,10 @@ const HomeTeams = () => {
                                     <Link to={"/changePassword"}>
                                         <li><p>Đổi mật khẩu</p></li>
                                     </Link>
+                                    <span onClick={Logout}>
+                                        <li><p>Đăng xuất</p></li>
+                                    </span>
+
                                 </ul>
                             </div>
                             <div id="content">
