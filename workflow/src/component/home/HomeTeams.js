@@ -11,7 +11,6 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 
 const HomeTeams = () => {
-    const dispatch = useDispatch();
 
     const validationSchema = Yup.object({
         teamId: Yup.string()
@@ -69,17 +68,29 @@ const HomeTeams = () => {
     const addMember = (id) => {
         setIdAddMember(id);
     }
+
+    const dispatch = useDispatch(); // khởi tạo dispatch dùng để dispatch action
+    // dispatch dùng để tự động gọi action setBoard trong redux, tự động thay đổi state boards
+
     const showBoard = (id) => {
-        boardService.getAllBoardByTeamId(id).then(res => {
-                if (res.length > 0) {
-                    res = res?.map((board) => {
-                        return {...board, isActive: false}
+        boardService.getAllBoardByTeamId(id).then(res => { // res là kết quả trả về sau khi call API
+                if (res.length > 0) { // nếu res có dữ liệu
+                    res = res?.map((board) => { // duyệt qua từng board trong res
+                        return {...board, isActive: false} // và khi trả về sẽ set từng phần tử trong res có key isActive = false
                     })
-                    res[0].isActive = true;
-                    dispatch(boardsSlice.actions.setBoard(res));
-                    navigate("/b/" + id)
+
+                    res[0].isActive = true; // set phần tử đầu tiên của res có key isActive = true
+                    // để mặc định khi vào trang sẽ hiển thị board đầu tiên
+
+                    dispatch(boardsSlice.actions.setBoard(res)); // sau khi set isActive = true cho board dau tien
+                    // thi dispatch action setBoard de set lai state boards trong redux
+
+                    // dispatch dùng để tự động gọi action setBoard trong redux, tự động thay đổi state boards
+                    // actions la mot object co key la ten action va value la function dung de set lai state boards
+
+                    navigate("/b/" + id)  // sau khi set xong state boards thì trả về trang board có id là idTeam
                 } else {
-                    navigate("/b/" + id)
+                    navigate("/b/" + id) // nếu res không có dữ liệu thì trả về trang board có id là idTeam
                 }
             }
         )
@@ -215,19 +226,17 @@ const HomeTeams = () => {
                                 <Formik
 
                                     initialValues={{
-                                        // teamId: '',
                                         teamId: idAddMember,
                                         username: '',
                                         permissionId: ''
                                     }}
 
-                                    enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
+                                    enableReinitialize={true}
 
                                     validationSchema={validationSchema}
 
                                     onSubmit={
                                         (values) => {
-                                            // values = {...values, teamId: idAddMember}
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
                                                 toast.success(res);
@@ -298,17 +307,20 @@ const HomeTeams = () => {
                                                     <div className="group-item">
                                                         <div className="group-actions">
 
-                                                            {/*<Link to={"/b/" + team.id}>*/}
-                                                            {/*    <span style={{fontSize: "1.2rem", paddingLeft:"30px"}}>{team.name}</span><br/>*/}
-                                                            {/*</Link>*/}
-
-                                                            <p onClick={() => showBoard(team.id)}>
-
-                                                                <span style={{
-                                                                    fontSize: "1.2rem",
-                                                                    paddingLeft: "30px"
-                                                                }}>{team.name}</span><br/>
-                                                            </p>
+                                                            {/*<p onClick={() => showBoard(team.id)}>*/}
+                                                            {/*    <span style={{*/}
+                                                            {/*        fontSize: "1.2rem",*/}
+                                                            {/*        paddingLeft: "30px"*/}
+                                                            {/*    }}>{team.name}</span><br/>*/}
+                                                            {/*</p>*/}
+                                                            <Link to={"/board/" + team.id}>
+                                                                <p>
+                                                                    <span style={{
+                                                                        fontSize: "1.2rem",
+                                                                        paddingLeft: "30px"
+                                                                    }}>{team.name}</span><br/>
+                                                                </p>
+                                                            </Link>
 
                                                             <button className="btn btn-pill btn-danger" style={{
                                                                 height: "2rem",

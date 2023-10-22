@@ -2,11 +2,25 @@ import {createSlice} from "@reduxjs/toolkit";
 import data from "../data.json";
 
 const boardsSlice = createSlice({
-    name: "boards", // ten cua action
+    // createSlice la mot ham cua redux toolkit, dung de tao ra mot slice có tác dụng tương tự như reducer
+    // reducer la mot ham cua redux, dung de xu ly logic va thay doi state
+
+    name: "boards", // là tên của slice, trong file store.js, ta sẽ sử dụng tên này để truy cập vào state của slice này
     initialState: [], // gia tri ban dau cua state la data.boards
-    // initialState: [],
 
     reducers: {
+        // hàm setBoard có tác dụng thay đổi state của slice này để lưu lại các board mới khi thêm, sửa, xóa
+        setBoard: (state, action) => {
+            // setBoard la mot action cua slice,
+            // action nay có tham số là state để lưu lại state hiện tại
+            // action nay có tham số là action để thực hiện các hành động khác nhau
+            console.log("action.payload", action.payload)
+            return (state = [...action.payload]
+                // trả về state mới,
+                // ...action.payload là một mảng các board copy từ action.payload và gán những giá trị mới cho state
+            );
+        },
+
         addBoard: (state, action) => {
             const isActive = state.length > 0 ? false : true;
             const payload = action.payload;
@@ -18,13 +32,6 @@ const boardsSlice = createSlice({
             board.columns = payload.newColumns;
             state.push(board);
         },
-
-        setBoard: (state, action) => {
-            console.log("action.payload", action.payload)
-            return (state = [...action.payload]
-            );
-        },
-
 
         editBoard: (state, action) => {
             const payload = action.payload;
