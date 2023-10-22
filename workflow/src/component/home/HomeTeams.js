@@ -304,12 +304,20 @@ const HomeTeams = () => {
                                                     <div className="group-item">
                                                         <div className="group-actions">
 
-                                                            <p onClick={() => showBoard(team.id)}>
-                                                                <span style={{
-                                                                    fontSize: "1.2rem",
-                                                                    paddingLeft: "30px"
-                                                                }}>{team.name}</span><br/>
-                                                            </p>
+                                                            {/*<p onClick={() => showBoard(team.id)}>*/}
+                                                            {/*    <span style={{*/}
+                                                            {/*        fontSize: "1.2rem",*/}
+                                                            {/*        paddingLeft: "30px"*/}
+                                                            {/*    }}>{team.name}</span><br/>*/}
+                                                            {/*</p>*/}
+                                                            <Link to={"/board/" + team.id}>
+                                                                <p>
+                                                                    <span style={{
+                                                                        fontSize: "1.2rem",
+                                                                        paddingLeft: "30px"
+                                                                    }}>{team.name}</span><br/>
+                                                                </p>
+                                                            </Link>
 
                                                             <button className="btn btn-pill btn-danger" style={{
                                                                 height: "2rem",

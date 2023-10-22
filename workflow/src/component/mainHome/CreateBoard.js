@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigate, useParams} from "react-router";
 import {Link} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import boardService from "../component/service/BoardService";
+import boardService from "../service/BoardService";
 import * as Yup from "yup";
 
 const CreateBoard = () => {
@@ -40,7 +40,7 @@ const CreateBoard = () => {
 
                     boardService.createBoardByTeamId(values, id).then(res => {
                         alert("Create board success")
-                        navigate("/b/" + id);
+                        navigate("/board/" + id);
                     }, err => {
                         console.log(err);
                     })

@@ -180,6 +180,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                             <div id={"ellipsis" + board.id} style={{display: 'none'}} className="menu-div-post">
                                                 <div className="menu-board">
                                                     <span>
+
                                                         <button className="menu-board-1" data-toggle="modal"
                                                                 data-target="#modalEditBoard" onClick={() => {
                                                             findBoardById(board.id)
@@ -188,6 +189,7 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                                         <button className="menu-board-2" onClick={() => {
                                                             removeBoard(board.id)
                                                         }}>Delete</button>
+
                                                     </span>
                                                 </div>
                                             </div>
@@ -202,9 +204,9 @@ function Sidebar({isSideBarOpen, setIsSideBarOpen}) {
                                         }}
                                     >
                                         <p className=" text-lg font-bold  ">
-                                            <Link to={"/createBoard/" + id}>
-                                                <button className="btn btn-info">Thêm bảng mới</button>
-                                            </Link>
+                                            {/*<Link to={"/createBoard/" + id}>*/}
+                                            {/*    <button className="btn btn-info">Thêm bảng mới</button>*/}
+                                            {/*</Link>*/}
                                         </p>
 
                                     </div>
