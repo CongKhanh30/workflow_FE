@@ -326,7 +326,9 @@ const HomeTeams = () => {
                                                             }}
                                                                     onClick={() => removeTeam(team.id)}>Delete
                                                             </button>
+
                                                             <span> </span>
+
                                                             | <button className="btn btn-pill btn-smoke" style={{
                                                             height: "2rem",
                                                             padding: "0.4rem",
@@ -339,6 +341,8 @@ const HomeTeams = () => {
                                                                       }>
                                                             Add Member
                                                         </button>
+
+
                                                         </div>
                                                         <div className="member-list">
                                                             <p style={{fontSize: "1.2rem"}}>Danh sách thành viên: </p>

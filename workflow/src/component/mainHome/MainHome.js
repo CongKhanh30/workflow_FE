@@ -2,8 +2,13 @@ import React, {useEffect, useState} from 'react';
 import boardService from "../service/BoardService";
 import {useParams} from "react-router";
 import colService from "../service/ColService";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {useNavigate} from "react-router-dom";
+import * as Yup from "yup";
 
 const MainHome = () => {
+
+    const navigate = useNavigate();
 
     function drag(ev) {
         ev.dataTransfer.setData("text", ev.target.id);
@@ -34,6 +39,15 @@ const MainHome = () => {
         }, []
     );
 
+    const validationSchema = Yup.object({
+        name: Yup.string()
+            .matches(/^[a-zA-Z0-9]*$/, 'Tên tài khoản không được chứa ký tự đặc biệt')
+            .required('Vui lòng nhập tên đăng nhập')
+            .min(6, 'Tên đăng nhập phải có ít nhất 6 ký tự')
+            .max(15, 'Tên đăng nhập không được quá 15 ký tự'),
+    });
+
+
     const [listCol, setListCol] = useState([]);
     const getAllColByIdBoard = (idBoard) => {
         colService.getAllColByIdBoard(idBoard).then(res => {
@@ -44,6 +58,24 @@ const MainHome = () => {
         }).catch(err => {
             console.log(err);
         });
+    }
+
+    const [board, setBoard] = useState({});
+    const findBoardById = (idBoard) => {
+        boardService.findBoardById(idBoard).then(res => {
+            setBoard(res);
+        })
+    };
+
+    const removeBoard = (idBoard) => {
+        const confirm = window.confirm("Are you sure you want to delete this board?");
+        if (confirm) {
+            boardService.removeBoard(idBoard).then(res => {
+                alert("Delete board success")
+                window.location.reload();
+                navigate("/board/" + id)
+            })
+        }
     }
 
 
@@ -131,6 +163,60 @@ body {
 
             <div>
                 <>
+                    <div className="modal fade" id="modalEditBoard" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Create Student</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+
+
+                                </div>
+
+                                <div className="modal-body">
+
+                                    <Formik
+
+                                        initialValues={board}
+
+                                        enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
+
+                                        validationSchema={validationSchema}
+
+                                        onSubmit={
+                                            (values) => {
+                                                console.log(values)
+                                                boardService.editNameBoard(values, board.id).then(res => {
+                                                    alert("Update success")
+                                                })
+                                            }}>
+
+                                        <Form>
+
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'name'} id="name"
+                                                ></Field>
+                                                <ErrorMessage name="name" component="div" className="text-danger"/>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+
+                                    </Formik>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
                     <div className="row">
 
                         <div className="col-3 bg-white">
@@ -161,9 +247,11 @@ body {
 
                                                     <button className="menu-board-1" data-toggle="modal"
                                                             data-target="#modalEditBoard" onClick={() => {
+                                                        findBoardById(board.id)
                                                     }}>Edit</button>
 
                                                     <button className="menu-board-2" onClick={() => {
+                                                        removeBoard(board.id)
                                                     }}>Delete</button>
                                                 </div>
 
@@ -263,20 +351,21 @@ body {
                                     <strong className="kanban-heading-text">Kanban Board</strong>
                                 </div>
 
-                                {listCol.map((col, index) => {
+                                {listCol.map((col, indexCol) => {
                                     console.log(col)
                                     return (
                                         <>
                                             <strong>{col.name}</strong>
-                                            {col.cards.map((card, index) => {
+
+                                            {col.cards.map((card, index) => { // index la gi
                                                 return (
 
                                                     <div className="kanban-board">
-                                                        <div className="kanban-block" id="todo" onDrop="drop(event)"
-                                                             onDragOver="allowDrop(event)">
+                                                        <div className="kanban-block" id="todo" onDrop={drop}
+                                                             onDragOver={allowDrop}>
 
-                                                            <div className="task" id="task1" draggable="true"
-                                                                 onDragStart="drag(event)">
+                                                            <div className="task" id={indexCol} draggable="true"
+                                                                 onDragStart={drag}>
                                                                 <span>{card.title}</span>
                                                             </div>
 
