@@ -117,8 +117,10 @@ const HomeTeams = () => {
                 color: black;
             }
             #sidebar {
-                width: 250px;
-                height: 100%;
+                width: 170px; 
+                height: 87%;
+                margin-left: 20px;
+                margin-top: 20px;
                 background: #CDDAF3;
                 position: fixed;
             }
@@ -135,6 +137,7 @@ const HomeTeams = () => {
             #sidebar ul li a {
                 color: black;
                 text-decoration: none;
+                font-size: 14px;
             }
     
             #content {
@@ -277,7 +280,7 @@ const HomeTeams = () => {
                             <h1 className="head">DANH SÁCH NHÓM</h1>
                             <div id="sidebar">
                                 <ul>
-                                    <li><a href="#">Đổi thông tin cá nhân</a></li>
+                                    <li><p>Đổi thông tin cá nhân</p></li>
                                     <Link to={"/changePassword"}>
                                         <li><p>Đổi mật khẩu</p></li>
                                     </Link>

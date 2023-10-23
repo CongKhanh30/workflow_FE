@@ -4,6 +4,7 @@ import AddEditBoardModal from "../modals/AddEditBoardModal";
 import Column from "./Column";
 import EmptyBoard from "./EmptyBoard";
 import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 function Home() {
   const [windowSize, setWindowSize] = useState([window.innerWidth, window.innerHeight]);
@@ -41,6 +42,8 @@ function Home() {
 
 
   return (
+      <>
+        <Header/>
       <div
           className={`${
               windowSize[0] >= 768 && isSideBarOpen
@@ -84,6 +87,7 @@ function Home() {
             />
         )}
       </div>
+      </>
   );
 }
 

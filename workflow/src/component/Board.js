@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import boardsSlice from "../redux/boardsSlice";
 import EmptyBoard from "./EmptyBoard";
 import {useDispatch, useSelector} from "react-redux";
@@ -26,9 +26,10 @@ const Board = () => {
         })
     }, []);
 
-
+    // const activeBoard = useMemo(() => {
+    //     return listBoard.find((board) => board.isActive);
+    // }, [listBoard])
     const activeBoard = listBoard.find((board) => board.isActive);
-    // const activeBoard = listBoard.find((board)=>board.isActive)
     if (!activeBoard && listBoard.length > 0)
         dispatch(boardsSlice.actions.setBoardActive({index: 0}));
     return (
