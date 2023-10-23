@@ -79,6 +79,26 @@ const teamService = {
                 reject(err)
             });
         })
+    },
+
+    findTeamById: (idTeam) => {
+        return new Promise((resolve, reject) => {
+            let config = {
+                method: 'get',
+                maxBodyLength: Infinity, // cho phep gui du lieu lon len server
+                url: 'http://localhost:8080/team/' + idTeam,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    'Accept': 'application/json'
+
+                }
+            }
+            axios.request(config).then(response => {
+                resolve(response.data);
+            }).catch(function (err) {
+                reject(err)
+            });
+        })
     }
 
 };

@@ -251,7 +251,10 @@ body {
                                             (values) => {
                                                 console.log(values)
                                                 cardService.editCard(values).then(res => {
+                                                       console.log(res)
                                                     alert("Update success")
+                                                    // reload lai trang
+                                                    window.location.reload();
                                                 })
                                             }}>
 
@@ -264,6 +267,15 @@ body {
 
                                                 <Field type="text" className="form-control" name={'title'} id="title"
                                                 ></Field>
+
+                                                <Field as="select" name="colId">
+                                                    <option value="">Chọn một tùy chọn</option>
+                                                    {listCol.map((col) => (
+                                                        <option key={col.id} value={col.id}>
+                                                            {col.name}
+                                                        </option>
+                                                    ))}
+                                                </Field>
 
 
                                                 <button type="submit" className="btn btn-primary"
@@ -299,6 +311,7 @@ body {
                                                             className="btn btn-primary"
                                                             onClick={() => getAllColByIdBoard(board.id)}
                                                     >{board.name}</button>
+
                                                     <button type="button"
                                                             className="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                                             data-toggle="dropdown">

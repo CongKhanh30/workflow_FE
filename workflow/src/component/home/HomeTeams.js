@@ -263,10 +263,73 @@ const HomeTeams = () => {
                                                     </option>
                                                 ))}
                                             </Field>
+
                                             <ErrorMessage name="permissionId" component="div" className="text-danger"/>
 
                                             <button type="submit" className="btn btn-primary"
                                             >Save
+                                            </button>
+                                        </div>
+                                    </Form>
+
+                                </Formik>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div className="modal fade" id="modalDeleteMember" tabIndex="-1" role="dialog"
+                     style={{position: "fixed", zIndex: 9999}}
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document">
+
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Thêm Thành Viên</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+
+                                <Formik
+
+                                    initialValues={{
+                                        teamId: idAddMember,
+                                        username: '',
+                                        permissionId: ''
+                                    }}
+
+                                    enableReinitialize={true}
+
+
+                                    onSubmit={
+                                        (values) => {
+                                            console.log(values)
+                                            teamService.addMember(values).then(res => {
+                                                toast.success(res);
+                                                setLoad(!load);
+                                            }).catch(err => {
+                                                console.log(err);
+                                            });
+                                        }}>
+
+                                    <Form>
+
+                                        <div className="modal-footer">
+
+                                            <Field type="hidden" className="form-control" name={'teamId'} id="teamId"
+                                            ></Field>
+
+                                            <Field type="text" className="form-control" name={'username'} id="username"
+                                            ></Field>
+
+
+                                            <button type="submit" className="btn btn-primary"
+                                            >Delete
                                             </button>
                                         </div>
                                     </Form>
@@ -332,7 +395,7 @@ const HomeTeams = () => {
 
                                                             <span> </span>
 
-                                                            | <button className="btn btn-pill btn-smoke" style={{
+                                                            <button className="btn btn-pill btn-smoke" style={{
                                                             height: "2rem",
                                                             padding: "0.4rem",
                                                             fontSize: "0.8rem"
@@ -344,6 +407,19 @@ const HomeTeams = () => {
                                                                       }>
                                                             Add Member
                                                         </button>
+
+                                                            <button className="btn btn-pill btn-smoke" style={{
+                                                                height: "2rem",
+                                                                padding: "0.4rem",
+                                                                fontSize: "0.8rem"
+                                                            }} data-toggle="modal"
+                                                                    data-target="#modalDeleteMember"
+                                                                    onClick={() => {
+                                                                        addMember(team.id)
+                                                                    }
+                                                                    }>
+                                                                DELETE Member
+                                                            </button>
 
 
                                                         </div>
