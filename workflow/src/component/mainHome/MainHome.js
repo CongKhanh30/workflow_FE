@@ -5,6 +5,8 @@ import colService from "../service/ColService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router-dom";
 import * as Yup from "yup";
+import cardService from "../service/CardService";
+import task from "../Task";
 
 const MainHome = () => {
 
@@ -31,7 +33,6 @@ const MainHome = () => {
             boardService.getAllBoardByTeamId(id).then(res => {
                 if (res.length > 0) {
                     setListBoard(res)
-                    console.log(res)
                 }
             }).catch(err => {
                 console.log(err);
@@ -53,7 +54,6 @@ const MainHome = () => {
         colService.getAllColByIdBoard(idBoard).then(res => {
             if (res.length > 0) {
                 setListCol(res)
-                console.log(res)
             }
         }).catch(err => {
             console.log(err);
@@ -76,6 +76,14 @@ const MainHome = () => {
                 navigate("/board/" + id)
             })
         }
+    }
+
+    const [card, setCard] = useState({});
+    const getCardById = (idCard) => {
+        cardService.getCardById(idCard).then(res => {
+            console.log(res)
+            setCard(res);
+        })
     }
 
 
@@ -175,7 +183,6 @@ body {
                                         <span aria-hidden="true">&times;</span>
                                     </button>
 
-
                                 </div>
 
                                 <div className="modal-body">
@@ -192,6 +199,7 @@ body {
                                             (values) => {
                                                 console.log(values)
                                                 boardService.editNameBoard(values, board.id).then(res => {
+                                                    console.log(res)
                                                     alert("Update success")
                                                 })
                                             }}>
@@ -206,6 +214,63 @@ body {
                                                 >Lưu lại
                                                 </button>
                                             </div>
+
+                                        </Form>
+
+                                    </Formik>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="modal fade" id="modalEditTask" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Create Student</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+
+                                </div>
+
+                                <div className="modal-body">
+
+                                    <Formik
+
+                                        initialValues={card}
+
+                                        enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
+
+                                        onSubmit={
+                                            (values) => {
+                                                console.log(values)
+                                                cardService.editCard(values).then(res => {
+                                                    alert("Update success")
+                                                })
+                                            }}>
+
+                                        <Form>
+
+                                            <div className="modal-footer">
+
+                                                <Field type="text" className="form-control" name={'id'} id="id"
+                                                ></Field>
+
+                                                <Field type="text" className="form-control" name={'title'} id="title"
+                                                ></Field>
+
+
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+
                                         </Form>
 
                                     </Formik>
@@ -229,7 +294,7 @@ body {
                                     {listBoard.map((board, index) => {
                                         return (
                                             <div>
-                                                <div className="btn-group">
+                                                <div className="btn-group mt-2">
                                                     <button type="button"
                                                             className="btn btn-primary"
                                                             onClick={() => getAllColByIdBoard(board.id)}
@@ -248,11 +313,13 @@ body {
                                                     <button className="menu-board-1" data-toggle="modal"
                                                             data-target="#modalEditBoard" onClick={() => {
                                                         findBoardById(board.id)
-                                                    }}>Edit</button>
+                                                    }}>Edit
+                                                    </button>
 
                                                     <button className="menu-board-2" onClick={() => {
                                                         removeBoard(board.id)
-                                                    }}>Delete</button>
+                                                    }}>Delete
+                                                    </button>
                                                 </div>
 
                                                 {/*{*/}
@@ -352,25 +419,38 @@ body {
                                 </div>
 
                                 {listCol.map((col, indexCol) => {
-                                    console.log(col)
                                     return (
                                         <>
                                             <strong>{col.name}</strong>
 
+                                            {/*<button className="menu-board-1" data-toggle="modal"*/}
+                                            {/*        data-target="#modalEditBoard" onClick={() => {*/}
+                                            {/*    findBoardById(board.id)*/}
+                                            {/*}}>Edit*/}
+                                            {/*</button>*/}
+
+
                                             {col.cards.map((card, index) => { // index la gi
                                                 return (
 
-                                                    <div className="kanban-board">
+                                                    <div className="kanban-board ">
                                                         <div className="kanban-block" id="todo" onDrop={drop}
                                                              onDragOver={allowDrop}>
 
-                                                            <div className="task" id={indexCol} draggable="true"
-                                                                 onDragStart={drag}>
-                                                                <span>{card.title}</span>
-                                                            </div>
+                                                            <button className="task"
+                                                                    id={indexCol} draggable="true"
+                                                                    onDragStart={drag}>
+
+                                                                <span data-target="#modalEditTask" data-toggle="modal"
+                                                                      onClick={() => {
+                                                                          getCardById(card.id)
+                                                                      }}
+                                                                >{card.title}</span>
+                                                            </button>
 
                                                         </div>
                                                     </div>
+
                                                 )
                                             })}
 

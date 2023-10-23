@@ -44,18 +44,17 @@ const cardService = {
         })
     },
 
-    editCard: (card, idCard) => {
+    editCard: (card) => {
         return new Promise((resolve, reject) => {
             let config = {
                 method: 'put',
                 maxBodyLength: Infinity,
-                url: 'http://localhost:8080/c/edit/' + idCard,
+                url: 'http://localhost:8080/c/edit/',
                 headers: {
                     "content-type": "application/json",
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 data: card,
-                idCard: idCard
             }
             axios.request(config).then(response => {
                 resolve(response.data);
