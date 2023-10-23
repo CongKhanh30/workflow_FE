@@ -7,10 +7,11 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 
 function Home() {
-  const [windowSize, setWindowSize] = useState([window.innerWidth, window.innerHeight]);
+
+   const [windowSize, setWindowSize] = useState([window.innerWidth, window.innerHeight]);
 
   useEffect(() => {
-    const handleWindowResize = () => {
+    const handleWindowResize = () => { // handleWindowResize là hàm để lấy kích thước của cửa sổ trình duyệt
       setWindowSize([window.innerWidth, window.innerHeight]);
     };
 
@@ -23,19 +24,23 @@ function Home() {
 
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
 
-  const boards = useSelector((state) => {
-    return state.boards
-  });
+  // const boards = useSelector((state) => {
+  //   return state.boards
+  // });
 
+  // khởi tạo columns là một mảng các cột = useSelector để lấy dữ liệu từ store
   const columns = useSelector((state) => {
-    for (const b of state.boards) {
-      if (b.isActive) {
-        return b.cols
+    for (const b of state.boards) { // duyệt qua mảng boards trong store
+      if (b.isActive) { // nếu isActive = true
+        console.log("b", b)
+        return b.cols // trả về mảng các cột của board đó
       }
     }
     return [];
   });
 
+  // khi click vào tên bảng sẽ thay đổi thuộc tính isActive của bảng đó thành true và các bảng còn lại thành false
+    // const activeBoard = boards.find((board) => board.isActive);
 
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
@@ -66,6 +71,8 @@ function Home() {
             <>
               {columns.map((col, index) => (
                   <Column key={index} colIndex={index} dataSidebar={columns} />              ))}
+              {/* trong colum key={index} là key của mỗi cột, colIndex={index} là index của mỗi cột,
+               dataSidebar={columns} là mảng các cột */}
               <div
                   onClick={() => {
                     setIsBoardModalOpen(true);
