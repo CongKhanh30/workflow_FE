@@ -95,8 +95,10 @@ const HomeTeams = () => {
             }
         )
     }
-
-
+    const Logout = () => {
+            localStorage.removeItem("token");
+            navigate("/login");
+    }
     return (
 
         <>
@@ -214,14 +216,11 @@ const HomeTeams = () => {
 
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Create Student</h5>
+                                <h5 className="modal-title" id="exampleModalLabel">Thêm Thành Viên</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-
-
                             </div>
-
                             <div className="modal-body">
 
                                 <Formik
@@ -240,7 +239,7 @@ const HomeTeams = () => {
                                         (values) => {
                                             console.log(values)
                                             teamService.addMember(values).then(res => {
-                                                toast.success("Add Member Success !")
+                                                toast.success(res);
                                                 setLoad(!load);
                                             }).catch(err => {
                                                 console.log(err);
@@ -291,6 +290,10 @@ const HomeTeams = () => {
                                     <Link to={"/changePassword"}>
                                         <li><p>Đổi mật khẩu</p></li>
                                     </Link>
+                                    <span onClick={Logout}>
+                                        <li><p>Đăng xuất</p></li>
+                                    </span>
+
                                 </ul>
                             </div>
                             <div id="content">
