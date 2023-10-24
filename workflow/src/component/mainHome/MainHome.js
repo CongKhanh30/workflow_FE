@@ -82,10 +82,10 @@ const MainHome = () => {
     };
 
     const removeBoard = (idBoard) => {
-        const confirm = window.confirm("Are you sure you want to delete this board?");
+        const confirm = window.confirm("Bạn có muốn xóa bảng này?");
         if (confirm) {
             boardService.removeBoard(idBoard).then(res => {
-                alert("Delete board success")
+                alert("Xóa bảng thành công")
                 window.location.reload();
                 navigate("/board/" + id)
             })
@@ -302,7 +302,7 @@ const MainHome = () => {
                         <nav className="navbar navbar-light bg-light justify-content-between">
                             <a className="w-auto pl-0 ml-5" href="/index.html"
                                style={{display: "flex", alignContent: "center"}}>
-                                <img src="./images/logo.png" alt="Mono" style={{marginRight: "10px"}}/>
+                                <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}}/>
                                 <span className="brand-name">Hello</span>
                             </a>
                             <form className="form-inline">
@@ -462,9 +462,9 @@ const MainHome = () => {
                                             validationSchema={validationSchema}
                                             onSubmit={
                                                 (values) => {
-                                                    console.log(values)
                                                     boardService.editNameBoard(values, board.id).then(res => {
-                                                        alert("Update success")
+                                                        toast.success("Update success")
+                                                        window.location.reload();
                                                     })
                                                 }}>
                                             <Form>
@@ -516,8 +516,8 @@ const MainHome = () => {
                                                                 findBoardById(board.id)
                                                             }}>Edit
                                                             </button>
-                                                            <button className="dropdown-item" data-toggle="modal"
-                                                                    data-target="#modalEditBoard" onClick={() => {
+                                                            <button className="dropdown-item"
+                                                                     onClick={() => {
                                                                 removeBoard(board.id)
                                                             }}>Delete
                                                             </button>

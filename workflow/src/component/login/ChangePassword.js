@@ -31,7 +31,7 @@ const ChangePassword = () => {
 
             })
             .catch(() => {
-                toast.error('Không thể thay đổi mật khẩu');
+                toast.error('Mật khẩu cũ không đúng!');
             });
     };
 

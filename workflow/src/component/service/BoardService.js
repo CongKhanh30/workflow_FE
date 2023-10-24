@@ -76,8 +76,6 @@ const boardService = {
                 id: id
             }
             axios.request(config).then(response => {
-                console.log("response.data sau khi edit = ");
-                console.log(response)
                 resolve(response.data);
             }).catch(function (err) {
                 reject(err)
