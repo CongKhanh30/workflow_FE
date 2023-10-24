@@ -128,7 +128,7 @@ const MainHome = () => {
 
 .colName {
     display: block;
-    width: 14em;
+    width: 12em;
     color: black;
     font-size: 1.5em;
 }
@@ -168,6 +168,13 @@ body {
     font-size: 1.5em;
     font-weight: bold;
 }
+
+.brand-name {
+    color: black;
+    font-size: 3em;
+    font-weight: bold;
+   
+}
                     `}
             </style>
 
@@ -175,9 +182,9 @@ body {
                 <>
                     <div>
                         <nav className="navbar navbar-light bg-light justify-content-between">
-                            <a className="w-auto pl-0" href="/index.html" style={{display: "flex", alignContent: "center"}}>
+                            <a className="w-auto pl-0 ml-5" href="/index.html" style={{display: "flex", alignContent: "center"}}>
                                 <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}} />
-                                <span className="brand-name text-dark">HELLO</span>
+                                <span className="brand-name">hello</span>
                             </a>
                             <form className="form-inline">
                                 <input className="form-control mr-sm-2" type="search" placeholder="Search"
@@ -235,9 +242,6 @@ body {
 
                         <div className="col-9">
                             <div className="container-fluid mt-10">
-                                {/*<div className="kanban-heading row">*/}
-                                {/*    <strong className="kanban-heading-text">Kanban Board</strong>*/}
-                                {/*</div>*/}
                                 <div className="kanban-board-container">
                                     {listCol.map((col, index) => (
                                         <div className="kanban-column" key={index}>
@@ -260,13 +264,9 @@ body {
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </>
-
             </div>
-
         </>
     );
 };
