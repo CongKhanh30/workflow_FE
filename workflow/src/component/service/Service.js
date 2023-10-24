@@ -38,11 +38,9 @@ const service = {
 
             axios.request(config)
                 .then((response) => {
-                    console.log(JSON.stringify(response.data));
                     resolve(response.data)
                 })
                 .catch((error) => {
-                    console.log(error);
                     reject(error)
                 });
 

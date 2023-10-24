@@ -70,7 +70,7 @@ const CreateBoard = () => {
                         (values) => {
                             boardService.createBoardByTeamId(values, id).then(res => {
                                 toast.success("Tạo Bảng Thành Công")
-                                navigate("/b/" + id);
+                                navigate("/board/" + id);
                             }, err => {
                                 console.log(err);
                             })
@@ -91,7 +91,7 @@ const CreateBoard = () => {
                                 ></Field>
                                 <ErrorMessage name="description" component="div" className="text-danger"/>
                                 <button type="submit" className="btn btn-success bg-green-500" style={{color:"black"}} >Save</button>
-                                <Link to={`/b/${id}`}>
+                                <Link to={`/board/${id}`}>
                                     <button className=" btn btn-warning bg-red-500 ml-2" type="button" >Close</button>
                                 </Link>
                         </div>

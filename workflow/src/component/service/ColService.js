@@ -22,9 +22,82 @@ const colService = {
                 reject(err)
             });
         })
+    },
+
+    createCol:(name, boardId) =>{
+        return new Promise((resolve, reject)=>{
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: `http://localhost:8080/col/create?name=${name}&boardId=${boardId}`,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((error) => {
+                    reject(error.response.data);
+                });
+
+        })
+    },
+
+    renameCol:(dataE) =>{
+        return new Promise((resolve, reject)=>{
+            let data = JSON.stringify(dataE);
+
+            let config = {
+                method: 'put',
+                maxBodyLength: Infinity,
+                url: 'http://localhost:8080/col/rn',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                data : data
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((error) => {
+                    reject(error.response.data);
+                });
+
+        })
+    },
+
+    createCard:(dataC) =>{
+        return new Promise((resolve, reject)=>{
+            let data = JSON.stringify(dataC);
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'http://localhost:8080/c/create',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                data : data
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((error) => {
+                    reject(error.response.data);
+                });
+
+        })
     }
-
-
 };
 
 export default colService;

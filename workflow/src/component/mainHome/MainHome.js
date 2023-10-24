@@ -1,14 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import boardService from "../service/BoardService";
 import {useParams} from "react-router";
 import colService from "../service/ColService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import * as Yup from "yup";
+import {toast} from "react-toastify";
+import Service from "../service/Service";
 
 const MainHome = () => {
 
     const navigate = useNavigate();
+    const [newColumnName, setNewColumnName] = useState('');
+    const [boardId, setBoardId] = useState(0);
+    const [colId, setColId] = useState(0);
 
     function drag(ev) {
         ev.dataTransfer.setData("text", ev.target.id);
@@ -25,7 +30,14 @@ const MainHome = () => {
     }
 
     const {id} = useParams()
+    const [cCard, setCCard] = useState();
     const [listBoard, setListBoard] = useState([]);
+    const [load, setLoad] = useState(false);
+
+    const changeInput = (event) => {
+        let {name, value} = event.target;
+        setCCard({...cCard, [name]: value});
+    }
 
     useEffect(() => {
             boardService.getAllBoardByTeamId(id).then(res => {
@@ -36,15 +48,15 @@ const MainHome = () => {
             }).catch(err => {
                 console.log(err);
             });
-        }, []
+        }, [load]
     );
 
     const validationSchema = Yup.object({
         name: Yup.string()
             .matches(/^[a-zA-Z0-9]*$/, 'Tên tài khoản không được chứa ký tự đặc biệt')
-            .required('Vui lòng nhập tên đăng nhập')
-            .min(6, 'Tên đăng nhập phải có ít nhất 6 ký tự')
-            .max(15, 'Tên đăng nhập không được quá 15 ký tự'),
+            .required('Vui lòng nhập nội dung')
+            .min(1, 'Tên phải có ít nhất 1 ký tự')
+            .max(15, 'Tên không được quá 15 ký tự'),
     });
 
 
@@ -54,7 +66,10 @@ const MainHome = () => {
             if (res.length > 0) {
                 setListCol(res)
                 console.log(res)
+            } else {
+                setListCol([]);
             }
+
         }).catch(err => {
             console.log(err);
         });
@@ -76,6 +91,78 @@ const MainHome = () => {
                 navigate("/board/" + id)
             })
         }
+    }
+
+    const createColumn = (newColumnName, id) => {
+        colService.createCol(newColumnName, id)
+            .then((res) => {
+                toast.success(res);
+                setLoad(!load);
+                document.getElementById('modalCreateCol').classList.remove('show');
+                document.body.classList.remove('modal-open');
+                const modalBackdrop = document.getElementsByClassName('modal-backdrop');
+                if (modalBackdrop[0]) {
+                    modalBackdrop[0].remove();
+                }
+                getAllColByIdBoard(id);
+            })
+            .catch((error) => {
+                toast.error(error);
+            });
+    };
+
+    const renameColumn = () => {
+        const columnData = {
+            newName: newColumnName,
+            colId: id,
+        };
+        colService.renameCol(columnData)
+            .then((res) => {
+                toast.success(res);
+                setLoad(!load);
+                document.getElementById('modalEditCol').classList.remove('show');
+                document.body.classList.remove('modal-open');
+                const modalBackdrop = document.getElementsByClassName('modal-backdrop');
+                if (modalBackdrop[0]) {
+                    modalBackdrop[0].remove();
+                }
+                getAllColByIdBoard(id);
+            })
+            .catch((error) => {
+                toast.error(error);
+            });
+    }
+
+    const [cardForm, setCardForm] = useState({
+        title: '',
+        description: '',
+        dueDate: '',
+    });
+
+    const resetCardForm = () => {
+        setCardForm({
+            title: '',
+            description: '',
+            dueDate: '',
+        });
+    };
+    const createCard = () => {
+        colService.createCard(cCard)
+            .then((response) => {
+                toast.success(response);
+                setLoad(!load);
+                document.getElementById('modalCreateCard').classList.remove('show');
+                document.body.classList.remove('modal-open');
+                const modalBackdrop = document.getElementsByClassName('modal-backdrop');
+                if (modalBackdrop[0]) {
+                    modalBackdrop[0].remove();
+                }
+                resetCardForm();
+                getAllColByIdBoard(id);
+            })
+            .catch((error) => {
+                toast.error(error);
+            });
     }
 
 
@@ -163,6 +250,163 @@ body {
 
             <div>
                 <>
+                    <div className="modal fade" id="modalCreateCol" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Create Column</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+
+
+                                </div>
+
+                                <div className="modal-body">
+
+                                    <Formik
+
+                                        initialValues={{}}
+
+                                        enableReinitialize={true}
+
+                                        validationSchema={validationSchema}
+
+                                        onSubmit={
+                                            (values) => {
+                                                createColumn(newColumnName, boardId);
+                                            }}>
+
+                                        <Form>
+
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'name'} id="name"
+                                                       onInput={(e) => setNewColumnName(e.target.value)}
+                                                ></Field>
+                                                <ErrorMessage name="name" component="div" className="text-danger"/>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+
+                                    </Formik>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="modal fade" id="modalEditCol" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Edit Column</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+
+
+                                </div>
+
+                                <div className="modal-body">
+
+                                    <Formik
+
+                                        initialValues={{name: newColumnName}}
+
+                                        enableReinitialize={true}
+
+                                        validationSchema={validationSchema}
+
+                                        onSubmit={
+                                            (values) => {
+                                                renameColumn();
+                                            }}>
+
+                                        <Form>
+
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'name'} id="name"
+                                                       onInput={(e) => setNewColumnName(e.target.value)}
+                                                ></Field>
+                                                <ErrorMessage name="name" component="div" className="text-danger"/>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+
+                                    </Formik>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="modal fade" id="modalCreateCard" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Create Card</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+
+
+                                </div>
+
+                                <div className="modal-body">
+
+                                    <Formik
+
+                                        initialValues={cardForm}
+
+                                        enableReinitialize={true}
+
+
+                                        onSubmit={
+                                            (values) => {
+                                                setCardForm(values);
+                                                createCard();
+                                            }}>
+
+                                        <Form>
+
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'title'} id="title"
+                                                       onInput={changeInput}
+                                                ></Field>
+                                                <Field type="text" className="form-control" name={'description'}
+                                                       id="description"
+                                                       onInput={changeInput}
+                                                ></Field>
+                                                <Field type="date" className="form-control" name={'dueDate'}
+                                                       id="dueDate"
+                                                       onInput={changeInput}
+                                                ></Field>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+
+                                    </Formik>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                     <div className="modal fade" id="modalEditBoard" tabIndex="-1" role="dialog"
                          style={{position: "fixed", zIndex: 9999}}
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -170,7 +414,7 @@ body {
 
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Create Student</h5>
+                                    <h5 className="modal-title" id="exampleModalLabel">Edit Board</h5>
                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -184,7 +428,7 @@ body {
 
                                         initialValues={board}
 
-                                        enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
+                                        enableReinitialize={true}
 
                                         validationSchema={validationSchema}
 
@@ -224,6 +468,10 @@ body {
                                 <h3 className="dark:text-gray-300 text-gray-600 font-semibold mx-4 mb-8">
                                     ALL BOARDS
                                 </h3>
+                                <Link to={`/homeTeam`}>
+                                    <button className=" btn btn-primary bg-blue-500 text-black" type="button">Back
+                                    </button>
+                                </Link>
 
                                 <div style={{textAlign: "center"}}>
                                     {listBoard.map((board, index) => {
@@ -232,7 +480,10 @@ body {
                                                 <div className="btn-group">
                                                     <button type="button"
                                                             className="btn btn-primary"
-                                                            onClick={() => getAllColByIdBoard(board.id)}
+                                                            onClick={() => {
+                                                                getAllColByIdBoard(board.id)
+                                                                setBoardId(board.id)
+                                                            }}
                                                     >{board.name}</button>
                                                     <button type="button"
                                                             className="btn btn-primary dropdown-toggle dropdown-toggle-split"
@@ -248,89 +499,19 @@ body {
                                                     <button className="menu-board-1" data-toggle="modal"
                                                             data-target="#modalEditBoard" onClick={() => {
                                                         findBoardById(board.id)
-                                                    }}>Edit</button>
+                                                    }}>Edit
+                                                    </button>
 
                                                     <button className="menu-board-2" onClick={() => {
                                                         removeBoard(board.id)
-                                                    }}>Delete</button>
+                                                    }}>Delete
+                                                    </button>
                                                 </div>
-
-                                                {/*{*/}
-                                                {/*    board.cols.map((column, index) => {*/}
-                                                {/*        return <div key={index}>{column.name}</div>*/}
-
-                                                {/*    })}*/}
                                             </div>
                                         )
 
                                     })}
 
-                                    {/*<br>*/}
-                                    {/*    <div>*/}
-                                    {/*        <div className="btn-group">*/}
-                                    {/*            <button type="button" className="btn btn-primary">Bảng 2</button>*/}
-                                    {/*            <button type="button"*/}
-                                    {/*                    className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                    data-toggle="dropdown">*/}
-                                    {/*                <span className="caret"></span>*/}
-                                    {/*            </button>*/}
-                                    {/*            <div className="dropdown-menu">*/}
-                                    {/*                <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*            </div>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*    */}
-                                    {/*    */}
-                                    {/*    <br>*/}
-                                    {/*        <div>*/}
-                                    {/*            <div className="btn-group">*/}
-                                    {/*                <button type="button" className="btn btn-primary">Bảng 3</button>*/}
-                                    {/*                <button type="button"*/}
-                                    {/*                        className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                        data-toggle="dropdown">*/}
-                                    {/*                    <span className="caret"></span>*/}
-                                    {/*                </button>*/}
-                                    {/*                <div className="dropdown-menu">*/}
-                                    {/*                    <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                    <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                </div>*/}
-                                    {/*            </div>*/}
-                                    {/*        </div>*/}
-                                    {/*        */}
-                                    {/*        */}
-                                    {/*        <br>*/}
-                                    {/*            <div>*/}
-                                    {/*                <div className="btn-group">*/}
-                                    {/*                    <button type="button" className="btn btn-primary">Bảng 4</button>*/}
-                                    {/*                    <button type="button"*/}
-                                    {/*                            className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                            data-toggle="dropdown">*/}
-                                    {/*                        <span className="caret"></span>*/}
-                                    {/*                    </button>*/}
-                                    {/*                    <div className="dropdown-menu">*/}
-                                    {/*                        <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                        <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                    </div>*/}
-                                    {/*                </div>*/}
-                                    {/*            </div>*/}
-                                    {/*    */}
-                                    {/*            <br>*/}
-                                    {/*                <div>*/}
-                                    {/*                    <div className="btn-group">*/}
-                                    {/*                        <button type="button" className="btn btn-primary">Bảng 5*/}
-                                    {/*                        </button>*/}
-                                    {/*                        <button type="button"*/}
-                                    {/*                                className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                                data-toggle="dropdown">*/}
-                                    {/*                            <span className="caret"></span>*/}
-                                    {/*                        </button>*/}
-                                    {/*                        <div className="dropdown-menu">*/}
-                                    {/*                            <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                            <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                        </div>*/}
-                                    {/*                    </div>*/}
-                                    {/*                </div>*/}
                                 </div>
                                 <div style={{textAlign: "center"}}>
                                     <button className="btn btn-info" onClick={() => {
@@ -350,14 +531,50 @@ body {
                                 <div className="kanban-heading">
                                     <strong className="kanban-heading-text">Kanban Board</strong>
                                 </div>
+                                <button className="btn btn-pill btn-smoke"
+                                        style={{height: "2rem", padding: "0.4rem", fontSize: "0.8rem", width: "15%"}}
+                                        data-toggle="modal"
+                                        data-target="#modalCreateCol"
+                                >
+                                    Create Column
+                                </button>
 
                                 {listCol.map((col, indexCol) => {
-                                    console.log(col)
                                     return (
                                         <>
-                                            <strong>{col.name}</strong>
 
-                                            {col.cards.map((card, index) => { // index la gi
+                                            <strong>{col.name}</strong>
+                                            <button className="btn btn-pill btn-smoke" style={{
+                                                height: "2rem",
+                                                padding: "0.4rem",
+                                                fontSize: "0.8rem",
+                                                width: "15%"
+                                            }}
+                                                    data-toggle="modal"
+                                                    data-target="#modalEditCol"
+                                                    onClick={() => {
+                                                        setNewColumnName(col.name);
+                                                        setColId(col.id);
+                                                    }}
+                                            >
+                                                Edit Column
+                                            </button>
+                                            <button className="btn btn-pill btn-smoke" style={{
+                                                height: "2rem",
+                                                padding: "0.4rem",
+                                                fontSize: "0.8rem",
+                                                width: "15%"
+                                            }}
+                                                    data-toggle="modal"
+                                                    data-target="#modalCreateCard"
+                                                    onClick={() => {
+                                                        setCCard({ colId: col.id });
+                                                    }}
+                                            >
+                                                Create Card
+                                            </button>
+
+                                            {col.cards.map((card, index) => {
                                                 return (
 
                                                     <div className="kanban-board">
@@ -370,6 +587,7 @@ body {
                                                             </div>
 
                                                         </div>
+
                                                     </div>
                                                 )
                                             })}

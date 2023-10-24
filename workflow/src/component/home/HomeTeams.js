@@ -244,6 +244,12 @@ const HomeTeams = () => {
                                             teamService.addMember(values).then(res => {
                                                 toast.success(res);
                                                 setLoad(!load);
+                                                document.getElementById('modalAddMember').classList.remove('show');
+                                                document.body.classList.remove('modal-open');
+                                                const modalBackdrop = document.getElementsByClassName('modal-backdrop');
+                                                if (modalBackdrop[0]) {
+                                                    modalBackdrop[0].remove();
+                                                }
                                             }).catch(err => {
                                                 console.log(err);
                                             });
@@ -310,12 +316,6 @@ const HomeTeams = () => {
                                                     <div className="group-item">
                                                         <div className="group-actions">
 
-                                                            {/*<p onClick={() => showBoard(team.id)}>*/}
-                                                            {/*    <span style={{*/}
-                                                            {/*        fontSize: "1.2rem",*/}
-                                                            {/*        paddingLeft: "30px"*/}
-                                                            {/*    }}>{team.name}</span><br/>*/}
-                                                            {/*</p>*/}
                                                             <Link to={"/board/" + team.id}>
                                                                 <p>
                                                                     <span style={{
