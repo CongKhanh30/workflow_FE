@@ -52,11 +52,12 @@ const MainHome = () => {
         <>
             <style>
                 {`
-                .container {
+.container {
     width: 70%;
     min-width: 50%;
     margin: auto;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
 }
 
@@ -69,10 +70,16 @@ const MainHome = () => {
 
 .kanban-heading-text {
     font-size: 1.8rem;
-    background-color: tomato;
+    background-color: #CDDAF3;
     padding: 0.8rem 1.7rem;
     border-radius: 0.5rem;
     margin: 1rem;
+    color: black;
+    
+}
+
+.kanban-column {
+   margin-right: 0;
 }
 
 .kanban-board {
@@ -82,16 +89,33 @@ const MainHome = () => {
     font-family: sans-serif;
 }
 
+.kanban-board-container {
+    display: flex;
+    overflow: auto; 
+    width:1000px;
+    height:700px;
+}
+
+.kanban-card-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.kanban-card {
+    margin: 5px 0;
+}
+
 .kanban-block {
     padding: 0.6rem;
     width: 30.5%;
     min-width: 14rem;
     min-height: 4.5rem;
     border-radius: 0.3rem;
+    border: 1px solid #ddd;
 }
 
 #todo {
-    background-color: #fec6d1;
+    background-color: #CDDAF3;
 }
 
 #inprogress {
@@ -100,6 +124,13 @@ const MainHome = () => {
 
 #done {
     background-color: #018b01;
+}
+
+.colName {
+    display: block;
+    width: 14em;
+    color: black;
+    font-size: 1.5em;
 }
 
 body {
@@ -112,6 +143,7 @@ body {
     border: 0.1rem solid black;
     border-radius: 0.2rem;
     padding: 0.5rem 0.2rem 0.5rem 2rem;
+    color: black;
 }
 
 #task-button {
@@ -125,25 +157,48 @@ body {
     font-size: 1rem;
 }
 
-                    
+.sidebar {
+    background-color: #CDDAF3;
+}
+
+.all-board {
+    margin: 1em;
+    margin-bottom: 1rem;
+    color: black;
+    font-size: 1.5em;
+    font-weight: bold;
+}
                     `}
             </style>
 
             <div>
                 <>
-                    <div className="row">
-
+                    <div>
+                        <nav className="navbar navbar-light bg-light justify-content-between">
+                            <a className="w-auto pl-0" href="/index.html" style={{display: "flex", alignContent: "center"}}>
+                                <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}} />
+                                <span className="brand-name text-dark">HELLO</span>
+                            </a>
+                            <form className="form-inline">
+                                <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                                       aria-label="Search"/>
+                                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search
+                                    </button>
+                            </form>
+                        </nav>
+                    </div>
+                    <div className="row no-gutters">
                         <div className="col-3 bg-white">
-                            <div className="">
-                                <h3 className="dark:text-gray-300 text-gray-600 font-semibold mx-4 mb-8">
+                            <div className="sidebar">
+                                <h3 className="all-board">
                                     ALL BOARDS
                                 </h3>
 
-                                <div style={{textAlign: "center"}}>
+                                <div className="pl-2 overflow-auto" style={{height: "65vh"}}>
                                     {listBoard.map((board, index) => {
                                         return (
                                             <div>
-                                                <div className="btn-group">
+                                                <div className="btn-group m-2">
                                                     <button type="button"
                                                             className="btn btn-primary"
                                                             onClick={() => getAllColByIdBoard(board.id)}
@@ -155,141 +210,54 @@ body {
                                                     </button>
 
                                                     <div className="dropdown-menu">
-                                                        <a className="dropdown-item" href="#">Edit</a>
-                                                        <a className="dropdown-item" href="#">Delete</a>
+                                                        <button className="dropdown-item" data-toggle="modal"
+                                                                data-target="#modalEditBoard" onClick={() => {
+                                                        }}>Edit
+                                                        </button>
+                                                        <button className="dropdown-item" data-toggle="modal"
+                                                                data-target="#modalEditBoard" onClick={() => {
+                                                        }}>Delete
+                                                        </button>
                                                     </div>
-
-                                                    <button className="menu-board-1" data-toggle="modal"
-                                                            data-target="#modalEditBoard" onClick={() => {
-                                                    }}>Edit</button>
-
-                                                    <button className="menu-board-2" onClick={() => {
-                                                    }}>Delete</button>
                                                 </div>
-
-                                                {/*{*/}
-                                                {/*    board.cols.map((column, index) => {*/}
-                                                {/*        return <div key={index}>{column.name}</div>*/}
-
-                                                {/*    })}*/}
                                             </div>
                                         )
-
                                     })}
-
-                                    {/*<br>*/}
-                                    {/*    <div>*/}
-                                    {/*        <div className="btn-group">*/}
-                                    {/*            <button type="button" className="btn btn-primary">Bảng 2</button>*/}
-                                    {/*            <button type="button"*/}
-                                    {/*                    className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                    data-toggle="dropdown">*/}
-                                    {/*                <span className="caret"></span>*/}
-                                    {/*            </button>*/}
-                                    {/*            <div className="dropdown-menu">*/}
-                                    {/*                <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*            </div>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*    */}
-                                    {/*    */}
-                                    {/*    <br>*/}
-                                    {/*        <div>*/}
-                                    {/*            <div className="btn-group">*/}
-                                    {/*                <button type="button" className="btn btn-primary">Bảng 3</button>*/}
-                                    {/*                <button type="button"*/}
-                                    {/*                        className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                        data-toggle="dropdown">*/}
-                                    {/*                    <span className="caret"></span>*/}
-                                    {/*                </button>*/}
-                                    {/*                <div className="dropdown-menu">*/}
-                                    {/*                    <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                    <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                </div>*/}
-                                    {/*            </div>*/}
-                                    {/*        </div>*/}
-                                    {/*        */}
-                                    {/*        */}
-                                    {/*        <br>*/}
-                                    {/*            <div>*/}
-                                    {/*                <div className="btn-group">*/}
-                                    {/*                    <button type="button" className="btn btn-primary">Bảng 4</button>*/}
-                                    {/*                    <button type="button"*/}
-                                    {/*                            className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                            data-toggle="dropdown">*/}
-                                    {/*                        <span className="caret"></span>*/}
-                                    {/*                    </button>*/}
-                                    {/*                    <div className="dropdown-menu">*/}
-                                    {/*                        <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                        <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                    </div>*/}
-                                    {/*                </div>*/}
-                                    {/*            </div>*/}
-                                    {/*    */}
-                                    {/*            <br>*/}
-                                    {/*                <div>*/}
-                                    {/*                    <div className="btn-group">*/}
-                                    {/*                        <button type="button" className="btn btn-primary">Bảng 5*/}
-                                    {/*                        </button>*/}
-                                    {/*                        <button type="button"*/}
-                                    {/*                                className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                                data-toggle="dropdown">*/}
-                                    {/*                            <span className="caret"></span>*/}
-                                    {/*                        </button>*/}
-                                    {/*                        <div className="dropdown-menu">*/}
-                                    {/*                            <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                            <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                        </div>*/}
-                                    {/*                    </div>*/}
-                                    {/*                </div>*/}
                                 </div>
-                                <div style={{textAlign: "center"}}>
-                                    <button className="btn btn-info" onClick={() => {
+                                <div>
+                                    <button className="btn btn-info m-4" onClick={() => {
                                         window.location.href = "/createBoard/" + id
-
                                     }}>Create Board
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-
                         <div className="col-9">
-
-                            <div className="container">
-
-                                <div className="kanban-heading">
-                                    <strong className="kanban-heading-text">Kanban Board</strong>
-                                </div>
-
-                                {listCol.map((col, index) => {
-                                    console.log(col)
-                                    return (
-                                        <>
-                                            <strong>{col.name}</strong>
-                                            {col.cards.map((card, index) => {
-                                                return (
-
-                                                    <div className="kanban-board">
+                            <div className="container-fluid mt-10">
+                                {/*<div className="kanban-heading row">*/}
+                                {/*    <strong className="kanban-heading-text">Kanban Board</strong>*/}
+                                {/*</div>*/}
+                                <div className="kanban-board-container">
+                                    {listCol.map((col, index) => (
+                                        <div className="kanban-column" key={index}>
+                                            <strong className="colName">{col.name}</strong>
+                                            <div className="kanban-card-container">
+                                                {col.cards.map((card, cardIndex) => (
+                                                    <div className="kanban-card" key={cardIndex}>
                                                         <div className="kanban-block" id="todo" onDrop="drop(event)"
                                                              onDragOver="allowDrop(event)">
-
                                                             <div className="task" id="task1" draggable="true"
                                                                  onDragStart="drag(event)">
                                                                 <span>{card.title}</span>
                                                             </div>
-
                                                         </div>
                                                     </div>
-                                                )
-                                            })}
-
-                                        </>
-                                    )
-                                })}
-
-
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
