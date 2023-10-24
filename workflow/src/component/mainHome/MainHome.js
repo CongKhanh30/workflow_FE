@@ -2,13 +2,8 @@ import React, {useEffect, useState} from 'react';
 import boardService from "../service/BoardService";
 import {useParams} from "react-router";
 import colService from "../service/ColService";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import {useNavigate} from "react-router-dom";
-import * as Yup from "yup";
 
 const MainHome = () => {
-
-    const navigate = useNavigate();
 
     function drag(ev) {
         ev.dataTransfer.setData("text", ev.target.id);
@@ -39,15 +34,6 @@ const MainHome = () => {
         }, []
     );
 
-    const validationSchema = Yup.object({
-        name: Yup.string()
-            .matches(/^[a-zA-Z0-9]*$/, 'Tên tài khoản không được chứa ký tự đặc biệt')
-            .required('Vui lòng nhập tên đăng nhập')
-            .min(6, 'Tên đăng nhập phải có ít nhất 6 ký tự')
-            .max(15, 'Tên đăng nhập không được quá 15 ký tự'),
-    });
-
-
     const [listCol, setListCol] = useState([]);
     const getAllColByIdBoard = (idBoard) => {
         colService.getAllColByIdBoard(idBoard).then(res => {
@@ -60,35 +46,18 @@ const MainHome = () => {
         });
     }
 
-    const [board, setBoard] = useState({});
-    const findBoardById = (idBoard) => {
-        boardService.findBoardById(idBoard).then(res => {
-            setBoard(res);
-        })
-    };
-
-    const removeBoard = (idBoard) => {
-        const confirm = window.confirm("Are you sure you want to delete this board?");
-        if (confirm) {
-            boardService.removeBoard(idBoard).then(res => {
-                alert("Delete board success")
-                window.location.reload();
-                navigate("/board/" + id)
-            })
-        }
-    }
-
 
     return (
 
         <>
             <style>
                 {`
-                .container {
+.container {
     width: 70%;
     min-width: 50%;
     margin: auto;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
 }
 
@@ -101,10 +70,16 @@ const MainHome = () => {
 
 .kanban-heading-text {
     font-size: 1.8rem;
-    background-color: tomato;
+    background-color: #CDDAF3;
     padding: 0.8rem 1.7rem;
     border-radius: 0.5rem;
     margin: 1rem;
+    color: black;
+    
+}
+
+.kanban-column {
+   margin-right: 0;
 }
 
 .kanban-board {
@@ -114,16 +89,33 @@ const MainHome = () => {
     font-family: sans-serif;
 }
 
+.kanban-board-container {
+    display: flex;
+    overflow: auto; 
+    width:1000px;
+    height:700px;
+}
+
+.kanban-card-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.kanban-card {
+    margin: 5px 0;
+}
+
 .kanban-block {
     padding: 0.6rem;
     width: 30.5%;
     min-width: 14rem;
     min-height: 4.5rem;
     border-radius: 0.3rem;
+    border: 1px solid #ddd;
 }
 
 #todo {
-    background-color: #fec6d1;
+    background-color: #CDDAF3;
 }
 
 #inprogress {
@@ -132,6 +124,13 @@ const MainHome = () => {
 
 #done {
     background-color: #018b01;
+}
+
+.colName {
+    display: block;
+    width: 12em;
+    color: black;
+    font-size: 1.5em;
 }
 
 body {
@@ -144,6 +143,7 @@ body {
     border: 0.1rem solid black;
     border-radius: 0.2rem;
     padding: 0.5rem 0.2rem 0.5rem 2rem;
+    color: black;
 }
 
 #task-button {
@@ -157,79 +157,55 @@ body {
     font-size: 1rem;
 }
 
-                    
+.sidebar {
+    background-color: #CDDAF3;
+}
+
+.all-board {
+    margin: 1em;
+    margin-bottom: 1rem;
+    color: black;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.brand-name {
+    color: black;
+    font-size: 3em;
+    font-weight: bold;
+   
+}
                     `}
             </style>
 
             <div>
                 <>
-                    <div className="modal fade" id="modalEditBoard" tabIndex="-1" role="dialog"
-                         style={{position: "fixed", zIndex: 9999}}
-                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog" role="document">
-
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Create Student</h5>
-                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                    <div>
+                        <nav className="navbar navbar-light bg-light justify-content-between">
+                            <a className="w-auto pl-0 ml-5" href="/index.html" style={{display: "flex", alignContent: "center"}}>
+                                <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}} />
+                                <span className="brand-name">hello</span>
+                            </a>
+                            <form className="form-inline">
+                                <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                                       aria-label="Search"/>
+                                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search
                                     </button>
-
-
-                                </div>
-
-                                <div className="modal-body">
-
-                                    <Formik
-
-                                        initialValues={board}
-
-                                        enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
-
-                                        validationSchema={validationSchema}
-
-                                        onSubmit={
-                                            (values) => {
-                                                console.log(values)
-                                                boardService.editNameBoard(values, board.id).then(res => {
-                                                    alert("Update success")
-                                                })
-                                            }}>
-
-                                        <Form>
-
-                                            <div className="modal-footer">
-                                                <Field type="text" className="form-control" name={'name'} id="name"
-                                                ></Field>
-                                                <ErrorMessage name="name" component="div" className="text-danger"/>
-                                                <button type="submit" className="btn btn-primary"
-                                                >Lưu lại
-                                                </button>
-                                            </div>
-                                        </Form>
-
-                                    </Formik>
-
-                                </div>
-                            </div>
-
-                        </div>
+                            </form>
+                        </nav>
                     </div>
-
-
-                    <div className="row">
-
+                    <div className="row no-gutters">
                         <div className="col-3 bg-white">
-                            <div className="">
-                                <h3 className="dark:text-gray-300 text-gray-600 font-semibold mx-4 mb-8">
+                            <div className="sidebar">
+                                <h3 className="all-board">
                                     ALL BOARDS
                                 </h3>
 
-                                <div style={{textAlign: "center"}}>
+                                <div className="pl-2 overflow-auto" style={{height: "65vh"}}>
                                     {listBoard.map((board, index) => {
                                         return (
                                             <div>
-                                                <div className="btn-group">
+                                                <div className="btn-group m-2">
                                                     <button type="button"
                                                             className="btn btn-primary"
                                                             onClick={() => getAllColByIdBoard(board.id)}
@@ -241,153 +217,56 @@ body {
                                                     </button>
 
                                                     <div className="dropdown-menu">
-                                                        <a className="dropdown-item" href="#">Edit</a>
-                                                        <a className="dropdown-item" href="#">Delete</a>
+                                                        <button className="dropdown-item" data-toggle="modal"
+                                                                data-target="#modalEditBoard" onClick={() => {
+                                                        }}>Edit
+                                                        </button>
+                                                        <button className="dropdown-item" data-toggle="modal"
+                                                                data-target="#modalEditBoard" onClick={() => {
+                                                        }}>Delete
+                                                        </button>
                                                     </div>
-
-                                                    <button className="menu-board-1" data-toggle="modal"
-                                                            data-target="#modalEditBoard" onClick={() => {
-                                                        findBoardById(board.id)
-                                                    }}>Edit</button>
-
-                                                    <button className="menu-board-2" onClick={() => {
-                                                        removeBoard(board.id)
-                                                    }}>Delete</button>
                                                 </div>
-
-                                                {/*{*/}
-                                                {/*    board.cols.map((column, index) => {*/}
-                                                {/*        return <div key={index}>{column.name}</div>*/}
-
-                                                {/*    })}*/}
                                             </div>
                                         )
-
                                     })}
-
-                                    {/*<br>*/}
-                                    {/*    <div>*/}
-                                    {/*        <div className="btn-group">*/}
-                                    {/*            <button type="button" className="btn btn-primary">Bảng 2</button>*/}
-                                    {/*            <button type="button"*/}
-                                    {/*                    className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                    data-toggle="dropdown">*/}
-                                    {/*                <span className="caret"></span>*/}
-                                    {/*            </button>*/}
-                                    {/*            <div className="dropdown-menu">*/}
-                                    {/*                <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*            </div>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*    */}
-                                    {/*    */}
-                                    {/*    <br>*/}
-                                    {/*        <div>*/}
-                                    {/*            <div className="btn-group">*/}
-                                    {/*                <button type="button" className="btn btn-primary">Bảng 3</button>*/}
-                                    {/*                <button type="button"*/}
-                                    {/*                        className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                        data-toggle="dropdown">*/}
-                                    {/*                    <span className="caret"></span>*/}
-                                    {/*                </button>*/}
-                                    {/*                <div className="dropdown-menu">*/}
-                                    {/*                    <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                    <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                </div>*/}
-                                    {/*            </div>*/}
-                                    {/*        </div>*/}
-                                    {/*        */}
-                                    {/*        */}
-                                    {/*        <br>*/}
-                                    {/*            <div>*/}
-                                    {/*                <div className="btn-group">*/}
-                                    {/*                    <button type="button" className="btn btn-primary">Bảng 4</button>*/}
-                                    {/*                    <button type="button"*/}
-                                    {/*                            className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                            data-toggle="dropdown">*/}
-                                    {/*                        <span className="caret"></span>*/}
-                                    {/*                    </button>*/}
-                                    {/*                    <div className="dropdown-menu">*/}
-                                    {/*                        <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                        <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                    </div>*/}
-                                    {/*                </div>*/}
-                                    {/*            </div>*/}
-                                    {/*    */}
-                                    {/*            <br>*/}
-                                    {/*                <div>*/}
-                                    {/*                    <div className="btn-group">*/}
-                                    {/*                        <button type="button" className="btn btn-primary">Bảng 5*/}
-                                    {/*                        </button>*/}
-                                    {/*                        <button type="button"*/}
-                                    {/*                                className="btn btn-primary dropdown-toggle dropdown-toggle-split"*/}
-                                    {/*                                data-toggle="dropdown">*/}
-                                    {/*                            <span className="caret"></span>*/}
-                                    {/*                        </button>*/}
-                                    {/*                        <div className="dropdown-menu">*/}
-                                    {/*                            <a className="dropdown-item" href="#">Edit</a>*/}
-                                    {/*                            <a className="dropdown-item" href="#">Delete</a>*/}
-                                    {/*                        </div>*/}
-                                    {/*                    </div>*/}
-                                    {/*                </div>*/}
                                 </div>
-                                <div style={{textAlign: "center"}}>
-                                    <button className="btn btn-info" onClick={() => {
+                                <div>
+                                    <button className="btn btn-info m-4" onClick={() => {
                                         window.location.href = "/createBoard/" + id
-
                                     }}>Create Board
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-
                         <div className="col-9">
-
-                            <div className="container">
-
-                                <div className="kanban-heading">
-                                    <strong className="kanban-heading-text">Kanban Board</strong>
-                                </div>
-
-                                {listCol.map((col, indexCol) => {
-                                    console.log(col)
-                                    return (
-                                        <>
-                                            <strong>{col.name}</strong>
-
-                                            {col.cards.map((card, index) => { // index la gi
-                                                return (
-
-                                                    <div className="kanban-board">
-                                                        <div className="kanban-block" id="todo" onDrop={drop}
-                                                             onDragOver={allowDrop}>
-
-                                                            <div className="task" id={indexCol} draggable="true"
-                                                                 onDragStart={drag}>
+                            <div className="container-fluid mt-10">
+                                <div className="kanban-board-container">
+                                    {listCol.map((col, index) => (
+                                        <div className="kanban-column" key={index}>
+                                            <strong className="colName">{col.name}</strong>
+                                            <div className="kanban-card-container">
+                                                {col.cards.map((card, cardIndex) => (
+                                                    <div className="kanban-card" key={cardIndex}>
+                                                        <div className="kanban-block" id="todo" onDrop="drop(event)"
+                                                             onDragOver="allowDrop(event)">
+                                                            <div className="task" id="task1" draggable="true"
+                                                                 onDragStart="drag(event)">
                                                                 <span>{card.title}</span>
                                                             </div>
-
                                                         </div>
                                                     </div>
-                                                )
-                                            })}
-
-                                        </>
-                                    )
-                                })}
-
-
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-
                     </div>
-
                 </>
-
             </div>
-
         </>
     );
 };
