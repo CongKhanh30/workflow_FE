@@ -13,6 +13,7 @@ import Column from "./component/Column";
 import Home from "./component/Home";
 import ChangePassword from "./component/login/ChangePassword";
 import MainHome from "./component/mainHome/MainHome";
+import MemberTeam from "./component/home/MemberTeam";
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path={'/createTeam'} element={<CreateHomeTeams/>}/>
                 <Route path={'/createBoard/:id'} element={<CreateBoard/>}/>
                 <Route path={'/board/:id'} element={<MainHome/>}/>
+                <Route path={'/memberTeam/:id'} element={<MemberTeam/>}/>
 
             </Routes>
         </Provider>

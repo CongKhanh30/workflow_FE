@@ -325,6 +325,12 @@ const HomeTeams = () => {
                                                                 </p>
                                                             </Link>
 
+                                                            <Link to={"/memberTeam/" + team.id}>
+                                                                <p>
+                                                                    Chi tiết
+                                                                </p>
+                                                            </Link>
+
                                                             <button className="btn btn-pill btn-danger" style={{
                                                                 height: "2rem",
                                                                 padding: "0.4rem",

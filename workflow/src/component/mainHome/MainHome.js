@@ -6,6 +6,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Link, useNavigate} from "react-router-dom";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
+import cardService from "../service/CardService";
 
 const MainHome = () => {
 
@@ -161,6 +162,15 @@ const MainHome = () => {
                 toast.error(error);
             });
     }
+
+    const [card, setCard] = useState({});
+    const getCardById = (idCard) => {
+        cardService.getCardById(idCard).then(res => {
+            console.log(res)
+            setCard(res);
+        })
+    }
+
 
 
     return (
@@ -332,6 +342,76 @@ const MainHome = () => {
                             </div>
                         </div>
                     </div>
+
+
+                    <div className="modal fade" id="modalEditTask" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Create Student</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+
+                                </div>
+
+                                <div className="modal-body">
+
+                                    <Formik
+
+                                        initialValues={card}
+
+                                        enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
+
+                                        onSubmit={
+                                            (values) => {
+                                                console.log(values)
+                                                cardService.editCard(values).then(res => {
+                                                    console.log(res)
+                                                    alert("Update success")
+                                                    // reload lai trang
+                                                    window.location.reload();
+                                                })
+                                            }}>
+
+                                        <Form>
+
+                                            <div className="modal-footer">
+
+                                                <Field type="text" className="form-control" name={'id'} id="id"
+                                                ></Field>
+
+                                                <Field type="text" className="form-control" name={'title'} id="title"
+                                                ></Field>
+
+                                                <Field as="select" name="colId">
+                                                    <option value="">Chọn một tùy chọn</option>
+                                                    {listCol.map((col) => (
+                                                        <option key={col.id} value={col.id}>
+                                                            {col.name}
+                                                        </option>
+                                                    ))}
+                                                </Field>
+
+
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+
+                                        </Form>
+
+                                    </Formik>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div className="modal fade" id="modalEditCol" tabIndex="-1" role="dialog"
                          style={{position: "fixed", zIndex: 9999}}
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -451,6 +531,7 @@ const MainHome = () => {
                             </div>
                         </div>
                     </div>
+
                     <div>
                         <nav className="navbar navbar-light bg-light justify-content-between">
                             <a className="w-auto pl-0 ml-5" href="/index.html"
@@ -555,7 +636,11 @@ const MainHome = () => {
                                                                          onDragOver={allowDrop}>
                                                                         <div className="task" id="task1" draggable="true"
                                                                              onDragStart={drag}>
-                                                                            <span>{card.title}</span>
+                                                                            <span data-target="#modalEditTask" data-toggle="modal"
+                                                                                  onClick={() => {
+                                                                                      getCardById(card.id)
+                                                                                  }}
+                                                                            >{card.title}</span>
                                                                         </div>
                                                                     </div>
                                                                 )})}
