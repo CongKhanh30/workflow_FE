@@ -298,7 +298,6 @@ const MainHome = () => {
                         color: black;
                         font-size: 3em;
                         font-weight: bold;
-                       
                     }
                 `}
             </style>
@@ -309,7 +308,6 @@ const MainHome = () => {
                          style={{position: "fixed", zIndex: 9999}}
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog" role="document">
-
                             <div className="modal-content">
                                 <div className="modal-header">
                                     <h5 className="modal-title" id="exampleModalLabel">Create Column</h5>
@@ -342,30 +340,21 @@ const MainHome = () => {
                             </div>
                         </div>
                     </div>
-
-
                     <div className="modal fade" id="modalEditTask" tabIndex="-1" role="dialog"
                          style={{position: "fixed", zIndex: 9999}}
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog" role="document">
-
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Create Student</h5>
+                                    <h5 className="modal-title" id="exampleModalLabel">Edit Card</h5>
                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
-
                                 </div>
-
                                 <div className="modal-body">
-
                                     <Formik
-
                                         initialValues={card}
-
-                                        enableReinitialize={true} // cho phep formik duoc khoi tao lai de gan lai gia tri ban dau
-
+                                        enableReinitialize={true}
                                         onSubmit={
                                             (values) => {
                                                 console.log(values)
@@ -376,17 +365,10 @@ const MainHome = () => {
                                                     window.location.reload();
                                                 })
                                             }}>
-
                                         <Form>
-
                                             <div className="modal-footer">
-
-                                                <Field type="text" className="form-control" name={'id'} id="id"
-                                                ></Field>
-
-                                                <Field type="text" className="form-control" name={'title'} id="title"
-                                                ></Field>
-
+                                                <Field type="text" className="form-control" name={'id'} id="id"></Field>
+                                                <Field type="text" className="form-control" name={'title'} id="title"></Field>
                                                 <Field as="select" name="colId">
                                                     <option value="">Chọn một tùy chọn</option>
                                                     {listCol.map((col) => (
@@ -395,23 +377,14 @@ const MainHome = () => {
                                                         </option>
                                                     ))}
                                                 </Field>
-
-
-                                                <button type="submit" className="btn btn-primary"
-                                                >Lưu lại
-                                                </button>
+                                                <button type="submit" className="btn btn-primary">Lưu lại</button>
                                             </div>
-
                                         </Form>
-
                                     </Formik>
-
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
                     <div className="modal fade" id="modalEditCol" tabIndex="-1" role="dialog"
                          style={{position: "fixed", zIndex: 9999}}
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -459,7 +432,6 @@ const MainHome = () => {
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-
                                 <div className="modal-body">
                                     <Formik
                                         initialValues={board}
@@ -531,10 +503,9 @@ const MainHome = () => {
                             </div>
                         </div>
                     </div>
-
                     <div>
                         <nav className="navbar navbar-light bg-light justify-content-between">
-                            <a className="w-auto pl-0 ml-5" href="/index.html"
+                            <a className="w-auto pl-0 ml-5"
                                style={{display: "flex", alignContent: "center"}}>
                                 <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}}/>
                                 <span className="brand-name">Hello</span>
@@ -568,7 +539,7 @@ const MainHome = () => {
                                                 <div>
                                                     <div className="btn-group m-2">
                                                         <button type="button"
-                                                                className="btn btn-primary"
+                                                                className="btn btn-primary" style={{color: "black"}}
                                                                 onClick={() => {
                                                                     getAllColByIdBoard(board.id)
                                                                     setBoardId(board.id)

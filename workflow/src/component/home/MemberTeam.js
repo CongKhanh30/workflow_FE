@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import teamService from "../service/TeamService";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useParams} from "react-router";
 
 const MemberTeam = () => {
@@ -40,24 +40,22 @@ const MemberTeam = () => {
                 {`
                 .member-team {
                     font-family: Arial, sans-serif;
-                   
                     background-color: #f4f4f4;
                     margin: 0;
                     padding: 0;
             }
 
                 h3 {
-                background-color: #333;
-                color: #fff;
-                 font-size: 44px;
+                color: while;
+                font-size: 44px;
                 text-align: center;
                 padding: 20px;
             }
 
-                .c-member{
+               .c-member{
                max-width: 800px;          
                margin: 0 auto;            
-                padding: 20px;             
+               padding: 20px;             
                background-color: #fff;    
             }
 
@@ -73,29 +71,40 @@ const MemberTeam = () => {
                 background-color: #fff;
             }       
 
-                h2 {
-                color: #333;
+                h1 {
+                color: black;
+                font-weight: bold;
             }
 
                 p {
                 color: #777;
+                
             }
             
             `}
             </style>
             <div className="member-team">
-                <div className="h-member">
-                    <h3>MEMBER TRONG TEAM</h3>
-                </div>
+                <nav className="navbar navbar-light bg-light justify-content-between">
+                    <a className="w-auto pl-0 ml-5" href="/index.html"
+                       style={{display: "flex", alignContent: "center"}}>
+                        <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}}/>
+                        <span className="brand-name" style={{color: "black", fontSize: "3em", fontWeight: "bold"}}>Hello</span>
+                    </a>
+                    <h3>MEMBERS TEAM</h3>
+                    <div className="d-flex">
+                        <Link to={`/homeTeam`} className="mr-8 mt-2">
+                            <button className=" btn btn-primary text-black mb-2 ml-5" type="button">Back</button>
+                        </Link>
+                    </div>
+                </nav>
                 <div className="c-member">
-
                     <ul>
                         {team.members.map((member, index) => (
                             <li key={index}>
-                                <h2>{member.name}</h2>
-                                <p>{member.permission}</p>
+                                <h1>Member Name: {member.name}</h1>
+                                <p>Permission: {member.permission}</p>
 
-                                <button className="btn btn-pill btn-smoke" style={{
+                                <button className="btn btn-pill btn-danger" style={{
                                     height: "2rem",
                                     padding: "0.4rem",
                                     fontSize: "0.8rem"
@@ -103,9 +112,8 @@ const MemberTeam = () => {
                                         data-target="#modalDeleteMember"
                                         onClick={() => {
                                             removeMemBer(team.id,member.username);
-                                        }
-                                        }>
-                                    DELETE Member
+                                        }}>
+                                    DELETE MEMBER
                                 </button>
                             </li>
                         ))}

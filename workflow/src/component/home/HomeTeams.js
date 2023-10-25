@@ -279,9 +279,7 @@ const HomeTeams = () => {
                                             </button>
                                         </div>
                                     </Form>
-
                                 </Formik>
-
                             </div>
                         </div>
 
@@ -291,11 +289,24 @@ const HomeTeams = () => {
 
                 <div>
                     <div>
+                        <nav className="navbar navbar-light bg-light justify-content-between">
+                            <a className="w-auto pl-0 ml-5" href="/index.html"
+                               style={{display: "flex", alignContent: "center"}}>
+                                <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}}/>
+                                <span className="brand-name" style={{color: "black", fontSize: "3em", fontWeight: "bold"}}>Hello</span>
+                            </a>
+                            <div className="d-flex">
+                                <form className="form-inline">
+                                    <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                                           aria-label="Search"/>
+                                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </nav>
                         <div className="container">
                             <h1 className="head">DANH SÁCH NHÓM</h1>
                             <div id="sidebar">
                                 <ul>
-                                    <li><p>Đổi thông tin cá nhân</p></li>
                                     <Link to={"/changePassword"}>
                                         <li><p>Đổi mật khẩu</p></li>
                                     </Link>
@@ -324,13 +335,6 @@ const HomeTeams = () => {
                                                                     }}>{team.name}</span><br/>
                                                                 </p>
                                                             </Link>
-
-                                                            <Link to={"/memberTeam/" + team.id}>
-                                                                <p>
-                                                                    Chi tiết
-                                                                </p>
-                                                            </Link>
-
                                                             <button className="btn btn-pill btn-danger" style={{
                                                                 height: "2rem",
                                                                 padding: "0.4rem",
@@ -365,6 +369,11 @@ const HomeTeams = () => {
                                                             </span>
                                                                 )
                                                             })}</p>
+                                                            <Link to={"/memberTeam/" + team.id}>
+                                                                <p style={{fontSize: "1.2em", color: "blue", textAlign: "center"}}>
+                                                                    Chi tiết
+                                                                </p>
+                                                            </Link>
                                                         </div>
                                                     </div>
                                                 </div>
