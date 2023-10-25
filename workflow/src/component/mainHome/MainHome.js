@@ -42,7 +42,6 @@ const MainHome = () => {
             boardService.getAllBoardByTeamId(id).then(res => {
                 if (res.length > 0) {
                     setListBoard(res)
-                    console.log(res)
                 }
             }).catch(err => {
                 console.log(err);
@@ -64,7 +63,6 @@ const MainHome = () => {
         colService.getAllColByIdBoard(idBoard).then(res => {
             if (res.length > 0) {
                 setListCol(res)
-                console.log(res)
             } else {
                 setListCol([]);
             }
@@ -209,18 +207,17 @@ const MainHome = () => {
                     
                     .kanban-board-container {
                         display: flex;
-                        overflow: auto; 
-                        width:1000px;
-                        height:700px;
+                        overflow-x: auto; 
+                        width: 74vw;
+                        height: 86vh;
                     }
                     
                     .kanban-card-container {
                         display: flex;
                         flex-direction: column;
-                    }
-                    
-                    .kanban-card {
-                        margin: 5px 0;
+                        width: 235px;
+                        overflow-y: auto;
+                        height: 75vh;
                     }
                     
                     .kanban-block {
@@ -298,6 +295,162 @@ const MainHome = () => {
 
             <div>
                 <>
+                    <div className="modal fade" id="modalCreateCol" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Create Column</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <Formik
+                                        initialValues={{}}
+                                        enableReinitialize={true}
+                                        validationSchema={validationSchema}
+                                        onSubmit={
+                                            (values) => {
+                                                createColumn(newColumnName, boardId);
+                                            }}>
+                                        <Form>
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'name'} id="name"
+                                                       onInput={(e) => setNewColumnName(e.target.value)}
+                                                ></Field>
+                                                <ErrorMessage name="name" component="div" className="text-danger"/>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+                                    </Formik>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal fade" id="modalEditCol" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Edit Column</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <Formik
+                                        initialValues={{name: newColumnName}}
+                                        enableReinitialize={true}
+                                        validationSchema={validationSchema}
+                                        onSubmit={
+                                            (values) => {
+                                                renameColumn();
+                                            }}>
+                                        <Form>
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'name'} id="name"
+                                                       onInput={(e) => setNewColumnName(e.target.value)}
+                                                ></Field>
+                                                <ErrorMessage name="name" component="div" className="text-danger"/>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+                                    </Formik>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal fade" id="modalEditBoard" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Edit Board</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div className="modal-body">
+                                    <Formik
+                                        initialValues={board}
+                                        enableReinitialize={true}
+                                        validationSchema={validationSchema}
+                                        onSubmit={
+                                            (values) => {
+                                                boardService.editNameBoard(values, board.id).then(res => {
+                                                    toast.success("Update success")
+                                                    window.location.reload();
+                                                })
+                                            }}>
+                                        <Form>
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'name'} id="name"
+                                                ></Field>
+                                                <ErrorMessage name="name" component="div" className="text-danger"/>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+                                    </Formik>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal fade" id="modalCreateCard" tabIndex="-1" role="dialog"
+                         style={{position: "fixed", zIndex: 9999}}
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    Create Card   <h5 className="modal-title" id="exampleModalLabel"></h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <Formik
+                                        initialValues={cardForm}
+                                        enableReinitialize={true}
+                                        onSubmit={
+                                            (values) => {
+                                                setCardForm(values);
+                                                createCard();
+                                            }}>
+                                        <Form>
+                                            <div className="modal-footer">
+                                                <Field type="text" className="form-control" name={'title'}
+                                                       id="title"
+                                                       onInput={changeInput}
+                                                ></Field>
+                                                <Field type="text" className="form-control" name={'description'}
+                                                       id="description"
+                                                       onInput={changeInput}
+                                                ></Field>
+                                                <Field type="date" className="form-control" name={'dueDate'}
+                                                       id="dueDate"
+                                                       onInput={changeInput}
+                                                ></Field>
+                                                <button type="submit" className="btn btn-primary"
+                                                >Lưu lại
+                                                </button>
+                                            </div>
+                                        </Form>
+                                    </Formik>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <nav className="navbar navbar-light bg-light justify-content-between">
                             <a className="w-auto pl-0 ml-5" href="/index.html"
@@ -305,193 +458,29 @@ const MainHome = () => {
                                 <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}}/>
                                 <span className="brand-name">Hello</span>
                             </a>
-                            <form className="form-inline">
-                                <input className="form-control mr-sm-2" type="search" placeholder="Search"
-                                       aria-label="Search"/>
-                                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                            </form>
+                            <div className="d-flex">
+                                <button className="btn btn-info mr-10"
+                                        data-toggle="modal"
+                                        data-target="#modalCreateCol"
+                                >
+                                    Create Column
+                                </button>
+                                <form className="form-inline">
+                                    <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                                           aria-label="Search"/>
+                                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                </form>
+                            </div>
                         </nav>
-                        <div className="modal fade" id="modalCreateCol" tabIndex="-1" role="dialog"
-                             style={{position: "fixed", zIndex: 9999}}
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div className="modal-dialog" role="document">
-
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="exampleModalLabel">Create Column</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-
-                                        <Formik
-
-                                            initialValues={{}}
-
-                                            enableReinitialize={true}
-
-                                            validationSchema={validationSchema}
-
-                                            onSubmit={
-                                                (values) => {
-                                                    createColumn(newColumnName, boardId);
-                                                }}>
-                                            <Form>
-                                                <div className="modal-footer">
-                                                    <Field type="text" className="form-control" name={'name'} id="name"
-                                                           onInput={(e) => setNewColumnName(e.target.value)}
-                                                    ></Field>
-                                                    <ErrorMessage name="name" component="div" className="text-danger"/>
-                                                    <button type="submit" className="btn btn-primary"
-                                                    >Lưu lại
-                                                    </button>
-                                                </div>
-                                            </Form>
-                                        </Formik>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="modal fade" id="modalEditCol" tabIndex="-1" role="dialog"
-                             style={{position: "fixed", zIndex: 9999}}
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="exampleModalLabel">Edit Column</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-
-                                        <Formik
-
-                                            initialValues={{name: newColumnName}}
-
-                                            enableReinitialize={true}
-
-                                            validationSchema={validationSchema}
-
-                                            onSubmit={
-                                                (values) => {
-                                                    renameColumn();
-                                                }}>
-
-                                            <Form>
-
-                                                <div className="modal-footer">
-                                                    <Field type="text" className="form-control" name={'name'} id="name"
-                                                           onInput={(e) => setNewColumnName(e.target.value)}
-                                                    ></Field>
-                                                    <ErrorMessage name="name" component="div" className="text-danger"/>
-                                                    <button type="submit" className="btn btn-primary"
-                                                    >Lưu lại
-                                                    </button>
-                                                </div>
-                                            </Form>
-
-                                        </Formik>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal fade" id="modalCreateCard" tabIndex="-1" role="dialog"
-                             style={{position: "fixed", zIndex: 9999}}
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div className="modal-dialog" role="document">
-
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="exampleModalLabel">Create Card</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <Formik
-                                            initialValues={cardForm}
-                                            enableReinitialize={true}
-                                            onSubmit={
-                                                (values) => {
-                                                    setCardForm(values);
-                                                    createCard();
-                                                }}>
-                                            <Form>
-                                                <div className="modal-footer">
-                                                    <Field type="text" className="form-control" name={'title'}
-                                                           id="title"
-                                                           onInput={changeInput}
-                                                    ></Field>
-                                                    <Field type="text" className="form-control" name={'description'}
-                                                           id="description"
-                                                           onInput={changeInput}
-                                                    ></Field>
-                                                    <Field type="date" className="form-control" name={'dueDate'}
-                                                           id="dueDate"
-                                                           onInput={changeInput}
-                                                    ></Field>
-                                                    <button type="submit" className="btn btn-primary"
-                                                    >Lưu lại
-                                                    </button>
-                                                </div>
-                                            </Form>
-                                        </Formik>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal fade" id="modalEditBoard" tabIndex="-1" role="dialog"
-                             style={{position: "fixed", zIndex: 9999}}
-                             aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="exampleModalLabel">Edit Board</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                    <div className="modal-body">
-                                        <Formik
-                                            initialValues={board}
-                                            enableReinitialize={true}
-                                            validationSchema={validationSchema}
-                                            onSubmit={
-                                                (values) => {
-                                                    boardService.editNameBoard(values, board.id).then(res => {
-                                                        toast.success("Update success")
-                                                        window.location.reload();
-                                                    })
-                                                }}>
-                                            <Form>
-                                                <div className="modal-footer">
-                                                    <Field type="text" className="form-control" name={'name'} id="name"
-                                                    ></Field>
-                                                    <ErrorMessage name="name" component="div" className="text-danger"/>
-                                                    <button type="submit" className="btn btn-primary"
-                                                    >Lưu lại
-                                                    </button>
-                                                </div>
-                                            </Form>
-                                        </Formik>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div className="row no-gutters">
                             <div className="col-3 bg-white">
                                 <div className="sidebar">
                                     <h3 className="all-board">
-                                        ALL BOARDS
+                                            ALL BOARDS
+                                        <Link to={`/homeTeam`}>
+                                            <button className=" btn btn-primary text-black mb-2 ml-5" type="button">Back</button>
+                                        </Link>
                                     </h3>
-                                    <Link to={`/homeTeam`}>
-                                        <button className=" btn btn-primary bg-blue-500 text-black" type="button">Back
-                                        </button>
-                                    </Link>
                                     <div className="pl-2 overflow-auto" style={{height: "65vh"}}>
                                         {listBoard.map((board, index) => {
                                             return (
@@ -537,109 +526,50 @@ const MainHome = () => {
                             </div>
 
                             <div className="col-9">
-
-                                <div className="container">
-
-                                    <div className="kanban-heading">
-                                        <strong className="kanban-heading-text">Kanban Board</strong>
-                                    </div>
-                                    <button className="btn btn-pill btn-smoke"
-                                            style={{
-                                                height: "2rem",
-                                                padding: "0.4rem",
-                                                fontSize: "0.8rem",
-                                                width: "15%"
-                                            }}
-                                            data-toggle="modal"
-                                            data-target="#modalCreateCol"
-                                    >
-                                        Create Column
-                                    </button>
-                                    {listCol.map((col, indexCol) => {
-                                        return (
-                                            <>
-                                                <strong>{col.name}</strong>
-                                                <button className="btn btn-pill btn-smoke" style={{
-                                                    height: "2rem",
-                                                    padding: "0.4rem",
-                                                    fontSize: "0.8rem",
-                                                    width: "15%"
-                                                }}
-                                                        data-toggle="modal"
-                                                        data-target="#modalEditCol"
-                                                        onClick={() => {
-                                                            setNewColumnName(col.name);
-                                                            setColId(col.id);
-                                                        }}
-                                                >
-                                                    Edit Column
-                                                </button>
-                                                <button className="btn btn-pill btn-smoke" style={{
-                                                    height: "2rem",
-                                                    padding: "0.4rem",
-                                                    fontSize: "0.8rem",
-                                                    width: "15%"
-                                                }}
-                                                        data-toggle="modal"
-                                                        data-target="#modalCreateCard"
-                                                        onClick={() => {
-                                                            setCCard({colId: col.id});
-                                                        }}
-                                                >
-                                                    Create Card
-                                                </button>
-
-                                                {col.cards.map((card, index) => {
-                                                    return (
-
-                                                        <div className="kanban-board">
-                                                            <div className="kanban-block" id="todo" onDrop={drop}
-                                                                 onDragOver={allowDrop}>
-
-                                                                <div className="task" id={indexCol} draggable="true"
-                                                                     onDragStart={drag}>
-                                                                    <span>{card.title}</span>
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-                                                    )
-                                                })}
-
-                                            </>
-                                        )
-                                    })}
-                                    <div className="container-fluid mt-10">
+                                    <div className="container-fluid mt-5">
                                         <div className="kanban-board-container">
                                             {listCol.map((col, index) => (
                                                 <div className="kanban-column" key={index}>
-                                                    <strong className="colName">{col.name}</strong>
+                                                    <strong className="colName">{col.name}
+                                                        <i style={{fontSize: "20px"}} type="button" className="fa ml-2" data-toggle="dropdown">
+                                                            <span className="caret"></span>&#xf142;</i>
+                                                        <div className="dropdown-menu">
+                                                            <button className="dropdown-item" data-toggle="modal"
+                                                                    data-target="#modalEditCol"
+                                                                    onClick={() => {
+                                                                setNewColumnName(col.name);
+                                                                setColId(col.id);
+                                                                    }}>
+                                                                Edit Column
+                                                            </button>
+                                                            <button className="dropdown-item" data-toggle="modal" data-target="#modalCreateCard"
+                                                                                onClick={() => {setCCard({colId: col.id})}}>
+                                                                Create Card
+                                                            </button>
+                                                        </div>
+                                                    </strong>
                                                     <div className="kanban-card-container">
-                                                        {col.cards.map((card, cardIndex) => (
-                                                            <div className="kanban-card" key={cardIndex}>
-                                                                <div className="kanban-block" id="todo"
-                                                                     onDrop="drop(event)"
-                                                                     onDragOver="allowDrop(event)">
-                                                                    <div className="task" id="task1" draggable="true"
-                                                                         onDragStart="drag(event)">
-                                                                        <span>{card.title}</span>
+                                                        {col.cards.map((card, cardIndex) => {
+                                                            return (
+                                                                    <div className="kanban-block mb-2" key={cardIndex} id="todo" onDrop={drop}
+                                                                         onDragOver={allowDrop}>
+                                                                        <div className="task" id="task1" draggable="true"
+                                                                             onDragStart={drag}>
+                                                                            <span>{card.title}</span>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
+                                                                )})}
                                                             </div>
-                                                        ))}
-                                                    </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                            ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </>
                         </div>
-                    </div>
-                </>
-            </div>
-        </>
-    );
-};
+                    </>
+                );
+            };
 export default MainHome;
