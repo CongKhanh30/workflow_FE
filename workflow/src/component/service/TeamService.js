@@ -93,6 +93,33 @@ const teamService = {
 
                 }
             }
+
+            axios.request(config).then(response => {
+                resolve(response.data);
+            }).catch(function (err) {
+                reject(err)
+            });
+        })
+    },
+
+    removeMember: (id,username) => {
+
+        return new Promise((resolve, reject) => {
+            let config = {
+                method: 'delete',
+                maxBodyLength: Infinity, // cho phep gui du lieu lon len server
+                url: 'http://localhost:8080/team/kick',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    "content-type": "application/json",
+                },
+                data: {
+                    teamId: id,
+                    username: username
+                }
+
+            }
+
             axios.request(config).then(response => {
                 resolve(response.data);
             }).catch(function (err) {

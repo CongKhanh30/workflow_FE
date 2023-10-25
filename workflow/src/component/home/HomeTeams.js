@@ -30,7 +30,7 @@ const HomeTeams = () => {
     });
 
     const [listTeam, setListTeam] = useState([]);
-    const [load, setLoad] = useState(false);
+    const [load, setLoad] = useState(false);  // load là state để khi thêm nhóm mới thì sẽ load lại danh sách nhóm
 
     useEffect(() => {
             teamService.getAllTeam().then(res => {
@@ -281,67 +281,6 @@ const HomeTeams = () => {
                 </div>
 
 
-                <div className="modal fade" id="modalDeleteMember" tabIndex="-1" role="dialog"
-                     style={{position: "fixed", zIndex: 9999}}
-                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog" role="document">
-
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Thêm Thành Viên</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-
-                                <Formik
-
-                                    initialValues={{
-                                        teamId: idAddMember,
-                                        username: '',
-                                        permissionId: ''
-                                    }}
-
-                                    enableReinitialize={true}
-
-
-                                    onSubmit={
-                                        (values) => {
-                                            console.log(values)
-                                            teamService.addMember(values).then(res => {
-                                                toast.success(res);
-                                                setLoad(!load);
-                                            }).catch(err => {
-                                                console.log(err);
-                                            });
-                                        }}>
-
-                                    <Form>
-
-                                        <div className="modal-footer">
-
-                                            <Field type="hidden" className="form-control" name={'teamId'} id="teamId"
-                                            ></Field>
-
-                                            <Field type="text" className="form-control" name={'username'} id="username"
-                                            ></Field>
-
-
-                                            <button type="submit" className="btn btn-primary"
-                                            >Delete
-                                            </button>
-                                        </div>
-                                    </Form>
-
-                                </Formik>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
 
                 <div>
                     <div>
@@ -370,12 +309,6 @@ const HomeTeams = () => {
                                                     <div className="group-item">
                                                         <div className="group-actions">
 
-                                                            {/*<p onClick={() => showBoard(team.id)}>*/}
-                                                            {/*    <span style={{*/}
-                                                            {/*        fontSize: "1.2rem",*/}
-                                                            {/*        paddingLeft: "30px"*/}
-                                                            {/*    }}>{team.name}</span><br/>*/}
-                                                            {/*</p>*/}
                                                             <Link to={"/board/" + team.id}>
                                                                 <p>
                                                                     <span style={{
@@ -385,13 +318,11 @@ const HomeTeams = () => {
                                                                 </p>
                                                             </Link>
 
-                                                            <button className="btn btn-pill btn-danger" style={{
-                                                                height: "2rem",
-                                                                padding: "0.4rem",
-                                                                fontSize: "0.8rem"
-                                                            }}
-                                                                    onClick={() => removeTeam(team.id)}>Delete
-                                                            </button>
+                                                            <Link to={"/memberTeam/" + team.id}>
+                                                                <p>
+                                                                    chi tiet nguoi dung
+                                                                </p>
+                                                            </Link>
 
                                                             <span> </span>
 
@@ -408,18 +339,6 @@ const HomeTeams = () => {
                                                             Add Member
                                                         </button>
 
-                                                            <button className="btn btn-pill btn-smoke" style={{
-                                                                height: "2rem",
-                                                                padding: "0.4rem",
-                                                                fontSize: "0.8rem"
-                                                            }} data-toggle="modal"
-                                                                    data-target="#modalDeleteMember"
-                                                                    onClick={() => {
-                                                                        addMember(team.id)
-                                                                    }
-                                                                    }>
-                                                                DELETE Member
-                                                            </button>
 
 
                                                         </div>
