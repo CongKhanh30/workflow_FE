@@ -40,7 +40,7 @@ const MemberTeam = () => {
                 {`
                 .member-team {
                     font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
+                    background-color: #CDDAF3;
                     margin: 0;
                     padding: 0;
             }
@@ -56,7 +56,8 @@ const MemberTeam = () => {
                max-width: 800px;          
                margin: 0 auto;            
                padding: 20px;             
-               background-color: #fff;    
+               background-color: #fff;
+                   
             }
 
                 ul {
