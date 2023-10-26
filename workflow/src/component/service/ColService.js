@@ -97,6 +97,27 @@ const colService = {
                 });
 
         })
+    },
+
+    deleteColById: (id) => {
+        return new Promise((resolve, reject) => {
+            let config = {
+                method: 'delete',
+                maxBodyLength: Infinity,
+                url: 'http://localhost:8080/col/delete/' + id,
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                data: id,
+                id: id
+            }
+            axios.request(config).then(response => {
+                resolve(response.data);
+            }).catch(function (err) {
+                reject(err)
+            });
+        })
     }
 };
 

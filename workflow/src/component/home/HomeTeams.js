@@ -295,13 +295,6 @@ const HomeTeams = () => {
                                 <img src="../images/logo.png" alt="Mono" style={{marginRight: "10px"}}/>
                                 <span className="brand-name" style={{color: "black", fontSize: "3em", fontWeight: "bold"}}>Hello</span>
                             </a>
-                            <div className="d-flex">
-                                <form className="form-inline">
-                                    <input className="form-control mr-sm-2" type="search" placeholder="Search"
-                                           aria-label="Search"/>
-                                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                                </form>
-                            </div>
                         </nav>
                         <div className="container">
                             <h1 className="head">DANH SÁCH NHÓM</h1>

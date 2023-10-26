@@ -171,6 +171,18 @@ const MainHome = () => {
         })
     }
 
+    const removeCol = (id) => {
+        const confirm = window.confirm("Are you sure you want to delete this column?");
+        if (confirm) {
+            colService.deleteColById(id).then(res => {
+                alert("Delete column success")
+                window.location.reload();
+                navigate("/board/" + id)
+            })
+        }
+    }
+
+
 
 
     return (
@@ -367,7 +379,6 @@ const MainHome = () => {
                                             }}>
                                         <Form>
                                             <div className="modal-footer">
-                                                <Field type="text" className="form-control" name={'id'} id="id"></Field>
                                                 <Field type="text" className="form-control" name={'title'} id="title"></Field>
                                                 <Field as="select" name="colId">
                                                     <option value="">Chọn một tùy chọn</option>
@@ -517,11 +528,6 @@ const MainHome = () => {
                                 >
                                     Create Column
                                 </button>
-                                <form className="form-inline">
-                                    <input className="form-control mr-sm-2" type="search" placeholder="Search"
-                                           aria-label="Search"/>
-                                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                                </form>
                             </div>
                         </nav>
                         <div className="row no-gutters">
@@ -586,6 +592,10 @@ const MainHome = () => {
                                                         <i style={{fontSize: "20px"}} type="button" className="fa ml-2" data-toggle="dropdown">
                                                             <span className="caret"></span>&#xf142;</i>
                                                         <div className="dropdown-menu">
+                                                            <button className="dropdown-item" onClick={() => {
+                                                                removeCol(col.id)
+                                                            }}>Delete Column
+                                                            </button>
                                                             <button className="dropdown-item" data-toggle="modal"
                                                                     data-target="#modalEditCol"
                                                                     onClick={() => {
