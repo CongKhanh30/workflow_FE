@@ -57,7 +57,7 @@ const MemberTeam = () => {
                margin: 0 auto;            
                padding: 20px;             
                background-color: #fff;
-                   
+               margin-top: 10px;    
             }
 
                 ul {
